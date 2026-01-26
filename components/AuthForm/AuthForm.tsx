@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 
 import AuthFormInputFields from '../AuthFormInputs/AuthFormInputs';
 import Link from 'next/link';
+import { useAuthStore } from '@/stores/auth.store';
 
 type AuthFormValues = {
   name?: string;
@@ -23,7 +24,7 @@ type Props = {
 const authSchema: ObjectSchema<AuthFormValues> = yup.object({
   name: yup
     .string()
-    .optional() // TS бачить optional
+    .optional()
     .when('$type', {
       is: 'register',
       then: schema =>
@@ -39,26 +40,44 @@ const authSchema: ObjectSchema<AuthFormValues> = yup.object({
     .required('This field is required'),
   password: yup
     .string()
-    .min(7, 'Must be at least 6 characters')
+    .min(7, 'Must be at least 7 characters')
     .required('This field is required'),
 });
 
 export default function AuthForm({ type }: Props) {
-  const [authError, setAuthError] = useState('');
+  const [localError, setLocalError] = useState('');
+  const {
+    login,
+    register: registerUser,
+    isLoading,
+    error,
+    clearError,
+  } = useAuthStore();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<AuthFormValues>({
-    resolver: yupResolver(authSchema), // вже без any
+    resolver: yupResolver(authSchema),
     context: { type },
   });
 
   const onSubmit = async (data: AuthFormValues) => {
-    setAuthError('');
-    console.log('Form submitted:', data);
-    // Тут можна підключати логіку login / register
+    setLocalError('');
+    clearError(); // Очищаємо попередні помилки зі стору
+
+    try {
+      if (type === 'register') {
+        await registerUser(data.name!, data.email.toLowerCase(), data.password);
+      } else {
+        await login(data.email.toLowerCase(), data.password);
+      }
+      window.location.href = '/recommended';
+    } catch (err: any) {
+      // Помилка вже збережена в стейті через store
+      // Можна додати локальну обробку якщо потрібно
+    }
   };
 
   return (
@@ -93,7 +112,7 @@ export default function AuthForm({ type }: Props) {
               </span>
             </div>
             {errors.name?.message && (
-              <p className="text-destructive text-[12px] md:text-[14px] mb-1">
+              <p className="text-destructive text-[12px] md:text-[14px] mt-1">
                 {errors.name.message as string}
               </p>
             )}
@@ -110,35 +129,42 @@ export default function AuthForm({ type }: Props) {
       <div className="flex justify-start items-center gap-3.5 mb-2">
         <button
           type="submit"
-          disabled={isSubmitting}
-          className="main-button py-4 w-full"
+          disabled={isSubmitting || isLoading}
+          className={cn(
+            'main-button py-4 w-full',
+            (isSubmitting || isLoading) && 'opacity-50 cursor-not-allowed'
+          )}
         >
-          {isSubmitting
+          {isSubmitting || isLoading
             ? type === 'register'
-              ? 'Registrating...'
+              ? 'Registering...'
               : 'Logging in...'
             : type === 'register'
               ? 'Registration'
               : 'Log in'}
         </button>
+
         <Link
           href={type === 'register' ? '/login' : '/register'}
           className={cn(
             'text-(--grey1) hover:text-foreground text-[12px] md:text-[14px]',
-            'underline leading-[1.17] md:leading[1.28571] tracking-[-0.02em] font-medium decoration-skip-ink-none',
+            'underline leading-[1.17] md:leading-[1.28571] tracking-[-0.02em] font-medium decoration-skip-ink-none',
             'transition-all duration-[250ms] ease-in-out'
           )}
         >
           {type === 'register'
             ? 'Already have an account?'
-            : 'Don’t have an account?'}
+            : "Don't have an account?"}
         </Link>
       </div>
 
-      {authError && (
-        <p className="text-destructive text-[12px] md:text-[14px] mb-1">
-          {authError}
-        </p>
+      {/* Відображення помилок */}
+      {(localError || error) && (
+        <div className="mt-2">
+          <p className="text-destructive text-[12px] md:text-[14px]">
+            {localError || error}
+          </p>
+        </div>
       )}
     </form>
   );
