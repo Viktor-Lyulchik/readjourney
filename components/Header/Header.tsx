@@ -2,14 +2,28 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { X } from 'lucide-react';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/lib/utils';
 
 export default function Header() {
   const { user, logout, isLoading } = useAuthStore();
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    if (isNavOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isNavOpen]);
 
   const handleLogout = async () => {
     await logout();
@@ -17,72 +31,201 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-(--dark-grey) p-5 flex justify-between items-center">
-      {/* Logo */}
-      <Link href="/">
-        <svg width="182" height="17">
-          <use href="/icons.svg#icon-logo" fill="#F9F9F9" stroke="#141414" />
-        </svg>
-      </Link>
+    <header className={cn('h-14.5 md:h-18.5 xxl:18.5', 'bg-(--dark-grey)')}>
+      <div
+        className={cn(
+          'container p-5! md:p-4! xxl:px-4! ',
+          'flex justify-between items-center'
+        )}
+      >
+        {/* Mobile logo */}
+        <Link href="/">
+          <svg className="block xxl:hidden" width="42" height="17">
+            <use
+              href="/icons.svg#icon-logo_mob"
+              fill="#F9F9F9"
+              stroke="#141414"
+            />
+          </svg>
+        </Link>
 
-      {/* Navigation */}
-      <nav>
-        {/* Desktop */}
-        <ul className="hidden md:flex gap-6">
-          <li>
-            <Link
-              href="/recommended"
+        {/* Tablet+ logo */}
+        <Link href="/">
+          <svg className="hidden xxl:block" width="182" height="17">
+            <use href="/icons.svg#icon-logo" fill="#F9F9F9" stroke="#141414" />
+          </svg>
+        </Link>
+
+        {/* Navigation */}
+        <nav className="hidden md:block">
+          {/* Desktop */}
+          <ul className="hidden md:flex gap-8 xxl:gap-10">
+            <li>
+              <Link
+                href="/recommended"
+                className={cn(
+                  'hover:text-foreground',
+                  'font-medium text-[16px] leading-[112.5%] tracking-[-0.02em] pb-2',
+                  location.pathname === '/recommended'
+                    ? 'text-foreground border-b-2 border-(--blue)'
+                    : 'text-(--grey1)'
+                )}
+              >
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/library"
+                className={cn(
+                  'hover:text-foreground',
+                  'font-medium text-[16px] leading-[112.5%] tracking-[-0.02em] pb-2',
+                  location.pathname === '/library'
+                    ? 'text-foreground border-b-2 border-(--blue)'
+                    : 'text-(--grey1)'
+                )}
+              >
+                My Library
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* UserBar */}
+        <div className="flex items-center gap-2.5 md:gap-4">
+          <div className="flex items-center gap-2">
+            <div
               className={cn(
-                'hover:text-foreground',
-                location.pathname === '/recommended' ? 'font-bold' : ''
+                'w-10 h-10 rounded-full bg-(--grey3) border border-(--grey1)',
+                'flex justify-center items-center',
+                'font-bold text-[16px]',
+                'leading-[125%] tracking-[-0.02em]'
               )}
             >
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/library"
-              className={cn(
-                'hover:text-foreground',
-                location.pathname === '/library' ? 'font-bold' : ''
-              )}
-            >
-              My Library
-            </Link>
-          </li>
-        </ul>
+              {user?.name.slice(0, 1)}
+            </div>
+            {user && (
+              <span
+                className={cn(
+                  'font-bold text-[16px]',
+                  'leading-[125%] tracking-[-0.02em]',
+                  'hidden xxl:block'
+                )}
+              >
+                {user.name}
+              </span>
+            )}
+          </div>
+          <button
+            className="main-button logout-button py-2 px-4 hidden md:block"
+            onClick={handleLogout}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Logging out...' : 'Log out'}
+          </button>
 
-        {/* Mobile / Tablet Burger */}
-        <div className="md:hidden relative">
-          <button onClick={() => setIsNavOpen(!isNavOpen)}>☰</button>
+          <button
+            className="md:hidden"
+            onClick={() => setIsNavOpen(!isNavOpen)}
+          >
+            <svg className="block" width="28" height="28">
+              <use
+                href="/icons.svg#icon-burger"
+                fill="#141414"
+                stroke="#F9F9F9"
+              />
+            </svg>
+          </button>
+
+          {/* Mobile Drawer */}
           {isNavOpen && (
-            <ul className="absolute right-0 mt-2 bg-(--dark-grey) p-4 rounded shadow-lg flex flex-col gap-2">
-              <li>
-                <Link href="/recommended" onClick={() => setIsNavOpen(false)}>
-                  Recommended
-                </Link>
-              </li>
-              <li>
-                <Link href="/library" onClick={() => setIsNavOpen(false)}>
-                  My Library
-                </Link>
-              </li>
-            </ul>
+            <div
+              className="md:hidden fixed inset-0 z-40 flex"
+              onClick={() => setIsNavOpen(false)}
+            >
+              {/* Backdrop */}
+              <div className="absolute inset-0 bg-black/50" />
+
+              {/* Drawer */}
+              <div
+                ref={menuRef}
+                className={cn(
+                  'relative ml-auto w-1/2 h-full',
+                  'bg-(--dark-grey)',
+                  'flex flex-col justify-center items-end', // ⬅️ центруємо по горизонталі
+                  'pt-[280px]',
+                  'px-14',
+                  'pb-10',
+                  'transform transition-transform duration-300 ease-in-out'
+                )}
+                onClick={e => e.stopPropagation()}
+              >
+                {/* Close button */}
+                <button
+                  onClick={() => setIsNavOpen(false)}
+                  className={cn(
+                    'absolute',
+                    'top-[41px] right-[47px]',
+                    'w-[28px] h-[28px]',
+                    'flex items-center justify-center'
+                  )}
+                  aria-label="Close menu"
+                >
+                  <X className="w-4 h-4 text-foreground" />
+                </button>
+
+                <div className="flex flex-col h-full gap-16 items-start mx-auto">
+                  {/* Navigation */}
+                  <nav className="w-full flex justify-start">
+                    <ul className="flex flex-col gap-5">
+                      <li>
+                        <Link
+                          href="/recommended"
+                          onClick={() => setIsNavOpen(false)}
+                          className={cn(
+                            'text-foreground font-medium text-[14px]',
+                            location.pathname === '/recommended'
+                              ? 'text-foreground border-b-2 border-(--blue)'
+                              : 'text-(--grey1)'
+                          )}
+                        >
+                          Home
+                        </Link>
+                      </li>
+
+                      <li>
+                        <Link
+                          href="/library"
+                          onClick={() => setIsNavOpen(false)}
+                          className={cn(
+                            'text-foreground font-medium text-[14px]',
+                            location.pathname === '/library'
+                              ? 'text-foreground border-b-2 border-(--blue)'
+                              : 'text-(--grey1)'
+                          )}
+                        >
+                          My Library
+                        </Link>
+                      </li>
+                    </ul>
+                  </nav>
+
+                  {/* Logout */}
+                  <button
+                    onClick={async () => {
+                      setIsNavOpen(false);
+                      await handleLogout();
+                    }}
+                    disabled={isLoading}
+                    className="main-button logout-button mt-auto"
+                  >
+                    {isLoading ? 'Logging out...' : 'Log out'}
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
         </div>
-      </nav>
-
-      {/* UserBar */}
-      <div className="flex items-center gap-4">
-        {user && <span className="text-(--grey1)">Hello, {user.name}</span>}
-        <button
-          className="main-button py-2 px-4"
-          onClick={handleLogout}
-          disabled={isLoading}
-        >
-          {isLoading ? 'Logging out...' : 'Log out'}
-        </button>
       </div>
     </header>
   );

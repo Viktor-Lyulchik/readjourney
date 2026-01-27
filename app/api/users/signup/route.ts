@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const apiRes = await api.post<SignupResponse>('/user/signup', body);
+    const apiRes = await api.post<SignupResponse>('/users/signup', body);
 
     if (apiRes.data && apiRes.data.token && apiRes.data.refreshToken) {
       const cookieStore = await cookies();

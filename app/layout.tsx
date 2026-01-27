@@ -3,6 +3,7 @@ import { Poppins } from 'next/font/google';
 import './globals.css';
 import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
 import { AuthProvider } from '@/components/AuthProvider/AuthProvider';
+import { Toaster } from 'sonner';
 
 export const poppins = Poppins({
   subsets: ['latin'],
@@ -27,6 +28,8 @@ export default function RootLayout({
         <TanStackProvider>
           <AuthProvider>{children}</AuthProvider>
         </TanStackProvider>
+        {/* Toast контейнер (глобальний) */}
+        <Toaster position="top-right" richColors closeButton />
       </body>
     </html>
   );

@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Link from 'next/link';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import type { ObjectSchema } from 'yup';
+import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
 import AuthFormInputFields from '../AuthFormInputs/AuthFormInputs';
-import Link from 'next/link';
 import { useAuthStore } from '@/stores/auth.store';
 
 type AuthFormValues = {
@@ -70,13 +71,20 @@ export default function AuthForm({ type }: Props) {
     try {
       if (type === 'register') {
         await registerUser(data.name!, data.email.toLowerCase(), data.password);
+        toast.success('Registration successful 🎉');
       } else {
         await login(data.email.toLowerCase(), data.password);
       }
       window.location.href = '/recommended';
     } catch (err: any) {
-      // Помилка вже збережена в стейті через store
-      // Можна додати локальну обробку якщо потрібно
+      const message =
+        typeof err?.message === 'string'
+          ? err.message
+          : 'Something went wrong. Please try again.';
+
+      toast.error(message);
+
+      setLocalError(message);
     }
   };
 

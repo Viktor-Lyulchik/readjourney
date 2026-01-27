@@ -60,6 +60,7 @@
   --grey1: oklch(0.49 0 0); /* #686868 */
   --grey2: oklch(0.9 0 0 / 0.3); /* E3E3E3 / 30% */
   --grey3: oklch(0.26 0 0); /* #262626 */
+  --grey4: oklch(0.985 0 0/0.2); /*rgba(249, 249, 249, 0.2);  #F9F9F9 / 20% */
   --dark-grey: oklch(0.22 0 0); /* #1F1F1F */
   --black: oklch(0.17 0 0); /* #141414 */
   --blue: oklch(0.65 0.18 255); /* #4F92F7 */
@@ -260,4 +261,30 @@ li {
     font-size: 20px;
     line-height: 1;
   }
+}
+
+.logout-button {
+  background: transparent;
+  border: 1px solid var(--grey4);
+  color: var(--foreground);
+  padding: 10px;
+  width: 91px;
+  height: 38px;
+}
+
+@media screen and (min-width: 768px) {
+  .logout-button {
+    font-size: 16px;
+    line-height: 1.125;
+
+    padding: 12px;
+    width: 114px;
+    height: 42px;
+  }
+}
+
+.logout-button:hover {
+  border: none;
+  background-color: var(--foreground);
+  color: var(--background);
 }
