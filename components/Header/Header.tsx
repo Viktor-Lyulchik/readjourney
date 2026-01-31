@@ -31,30 +31,45 @@ export default function Header() {
   };
 
   return (
-    <header className={cn('h-14.5 md:h-18.5 xxl:18.5', 'bg-(--dark-grey)')}>
+    <header
+      className={cn(
+        'h-18.5 md:h-26.5 xxl:26.5',
+        'bg-background',
+        'pt-4 md:pt-8 xxl:pt-8',
+        'mb-2.5 md:mb-4 xxl:mb-4'
+      )}
+    >
       <div
         className={cn(
-          'container p-5! md:p-4! xxl:px-4! ',
+          'bg-(--dark-grey)',
+          'rounded-2xl',
+          'container px-5! py-2.5! md:p-4! xxl:p-4!',
           'flex justify-between items-center'
         )}
       >
-        {/* Mobile logo */}
-        <Link href="/">
-          <svg className="block xxl:hidden" width="42" height="17">
-            <use
-              href="/icons.svg#icon-logo_mob"
-              fill="#F9F9F9"
-              stroke="#141414"
-            />
-          </svg>
-        </Link>
+        <div>
+          {/* Mobile logo */}
+          <Link href="/">
+            <svg className="block xxl:hidden" width="42" height="17">
+              <use
+                href="/icons.svg#icon-logo_mob"
+                fill="#F9F9F9"
+                stroke="#141414"
+              />
+            </svg>
+          </Link>
 
-        {/* Tablet+ logo */}
-        <Link href="/">
-          <svg className="hidden xxl:block" width="182" height="17">
-            <use href="/icons.svg#icon-logo" fill="#F9F9F9" stroke="#141414" />
-          </svg>
-        </Link>
+          {/* Tablet+ logo */}
+          <Link href="/">
+            <svg className="hidden xxl:block" width="182" height="17">
+              <use
+                href="/icons.svg#icon-logo"
+                fill="#F9F9F9"
+                stroke="#141414"
+              />
+            </svg>
+          </Link>
+        </div>
 
         {/* Navigation */}
         <nav className="hidden md:block">
@@ -153,7 +168,7 @@ export default function Header() {
                   'relative ml-auto w-1/2 h-full',
                   'bg-(--dark-grey)',
                   'flex flex-col justify-center items-end', // ⬅️ центруємо по горизонталі
-                  'pt-[280px]',
+                  'pt-70',
                   'px-14',
                   'pb-10',
                   'transform transition-transform duration-300 ease-in-out'
@@ -165,8 +180,8 @@ export default function Header() {
                   onClick={() => setIsNavOpen(false)}
                   className={cn(
                     'absolute',
-                    'top-[41px] right-[47px]',
-                    'w-[28px] h-[28px]',
+                    'top-10.25 right-11.75',
+                    'w-7 h-7',
                     'flex items-center justify-center'
                   )}
                   aria-label="Close menu"

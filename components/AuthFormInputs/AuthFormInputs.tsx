@@ -37,7 +37,8 @@ export default function AuthFormInputFields<T extends FieldValues>({
           />
           <span
             className={cn(
-              'absolute left-2 top-1/2 -translate-y-1/2 text-(--grey1) text-[12px] pointer-events-none'
+              'absolute left-2 top-1/2 -translate-y-1/2',
+              'text-(--grey1) text-[12px] pointer-events-none'
             )}
           >
             Email

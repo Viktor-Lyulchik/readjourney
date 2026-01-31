@@ -157,7 +157,7 @@ export default function AuthForm({ type }: Props) {
           className={cn(
             'text-(--grey1) hover:text-foreground text-[12px] md:text-[14px]',
             'underline leading-[1.17] md:leading-[1.28571] tracking-[-0.02em] font-medium decoration-skip-ink-none',
-            'transition-all duration-[250ms] ease-in-out'
+            'transition-all duration-250 ease-in-out'
           )}
         >
           {type === 'register'

@@ -288,3 +288,18 @@ li {
   background-color: var(--foreground);
   color: var(--background);
 }
+
+@keyframes loader {
+  0% {
+    transform: rotateY(0deg);
+  }
+  50%,
+  80% {
+    transform: rotateY(-180deg);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: rotateY(-180deg);
+  }
+}

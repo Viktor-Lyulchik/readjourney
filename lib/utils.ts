@@ -1,9 +1,12 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
+
+type Primitive = string | number | boolean;
+type ParamValue = Primitive | Primitive[] | undefined | null;
 
 // Serializes an object of parameters into a URL query string
 export function serializeParams(params: Record<string, ParamValue>): string {
