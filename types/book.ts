@@ -42,7 +42,7 @@ export interface BookDetailsResponse {
   author: string;
   imageUrl: string;
   totalPages: number;
-  status: 'in-progress' | 'done' | 'planned';
+  status: 'in-progress' | 'done' | 'unread';
   owner: string;
   progress: BookProgress[];
   timeLeftToRead?: TimeLeftToRead;

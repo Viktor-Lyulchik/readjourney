@@ -6,21 +6,70 @@ import { useState, useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/lib/utils';
+import NavLink from './NavLink';
+import {
+  CARD_CONTAINER,
+  FLEX_BETWEEN,
+  GAP_LG,
+} from '@/lib/styles/containers.styles';
+import { BUTTON_SECONDARY } from '@/lib/styles/buttons.styles';
+
+// Константи для Header
+const HEADER_HEIGHT = cn(
+  'h-18.5 md:h-26.5 xxl:26.5',
+  'bg-background',
+  'pt-4 md:pt-8 xxl:pt-8',
+  'mb-2.5 md:mb-4 xxl:mb-4'
+);
+
+const HEADER_CONTAINER = cn(
+  CARD_CONTAINER,
+  'container px-5! py-2.5! md:p-4! xxl:p-4!',
+  FLEX_BETWEEN
+);
+
+const USER_AVATAR = cn(
+  'w-10 h-10 rounded-full bg-(--grey3) border border-(--grey1)',
+  'flex justify-center items-center',
+  'font-bold text-[16px]',
+  'leading-[125%] tracking-[-0.02em]'
+);
+
+const USER_NAME = cn(
+  'font-bold text-[16px]',
+  'leading-[125%] tracking-[-0.02em]',
+  'hidden xxl:block'
+);
+
+const DRAWER = cn(
+  'relative ml-auto w-1/2 h-full',
+  'bg-(--dark-grey)',
+  'flex flex-col justify-center items-end',
+  'pt-70 px-14 pb-10',
+  'transform transition-transform duration-300 ease-in-out'
+);
+
+const CLOSE_BUTTON = cn(
+  'absolute top-10.25 right-11.75',
+  'w-7 h-7',
+  'flex items-center justify-center'
+);
+
+// Навігаційні лінки (data для рендерингу)
+const NAV_LINKS = [
+  { href: '/recommended', label: 'Home' },
+  { href: '/library', label: 'My Library' },
+];
 
 export default function Header() {
   const { user, logout, isLoading } = useAuthStore();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
-  const pathname = usePathname(); // ✅ Використовуємо правильний хук
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (isNavOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-
+    document.body.style.overflow = isNavOpen ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
     };
@@ -31,30 +80,15 @@ export default function Header() {
     router.replace('/login');
   };
 
-  // ✅ Функція для перевірки активного маршруту
   const isActiveRoute = (route: string) => {
     return pathname === route || pathname?.startsWith(`${route}/`);
   };
 
   return (
-    <header
-      className={cn(
-        'h-18.5 md:h-26.5 xxl:26.5',
-        'bg-background',
-        'pt-4 md:pt-8 xxl:pt-8',
-        'mb-2.5 md:mb-4 xxl:mb-4'
-      )}
-    >
-      <div
-        className={cn(
-          'bg-(--dark-grey)',
-          'rounded-2xl',
-          'container px-5! py-2.5! md:p-4! xxl:p-4!',
-          'flex justify-between items-center'
-        )}
-      >
+    <header className={HEADER_HEIGHT}>
+      <div className={HEADER_CONTAINER}>
+        {/* Logo */}
         <div>
-          {/* Mobile logo */}
           <Link href="/">
             <svg className="block xxl:hidden" width="42" height="17">
               <use
@@ -64,8 +98,6 @@ export default function Header() {
               />
             </svg>
           </Link>
-
-          {/* Tablet+ logo */}
           <Link href="/">
             <svg className="hidden xxl:block" width="182" height="17">
               <use
@@ -77,74 +109,38 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Navigation */}
+        {/* Desktop Navigation */}
         <nav className="hidden md:block">
-          {/* Desktop */}
-          <ul className="hidden md:flex gap-8 xxl:gap-10">
-            <li>
-              <Link
-                href="/recommended"
-                className={cn(
-                  'hover:text-foreground',
-                  'font-medium text-[16px] leading-[112.5%] tracking-[-0.02em] pb-2',
-                  isActiveRoute('/recommended')
-                    ? 'text-foreground border-b-2 border-(--blue)'
-                    : 'text-(--grey1)'
-                )}
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/library"
-                className={cn(
-                  'hover:text-foreground',
-                  'font-medium text-[16px] leading-[112.5%] tracking-[-0.02em] pb-2',
-                  isActiveRoute('/library')
-                    ? 'text-foreground border-b-2 border-(--blue)'
-                    : 'text-(--grey1)'
-                )}
-              >
-                My Library
-              </Link>
-            </li>
+          <ul className={cn('hidden md:flex', GAP_LG)}>
+            {NAV_LINKS.map(link => (
+              <li key={link.href}>
+                <NavLink
+                  href={link.href}
+                  label={link.label}
+                  isActive={isActiveRoute(link.href)}
+                />
+              </li>
+            ))}
           </ul>
         </nav>
 
         {/* UserBar */}
         <div className="flex items-center gap-2.5 md:gap-4">
           <div className="flex items-center gap-2">
-            <div
-              className={cn(
-                'w-10 h-10 rounded-full bg-(--grey3) border border-(--grey1)',
-                'flex justify-center items-center',
-                'font-bold text-[16px]',
-                'leading-[125%] tracking-[-0.02em]'
-              )}
-            >
-              {user?.name.slice(0, 1)}
-            </div>
-            {user && (
-              <span
-                className={cn(
-                  'font-bold text-[16px]',
-                  'leading-[125%] tracking-[-0.02em]',
-                  'hidden xxl:block'
-                )}
-              >
-                {user.name}
-              </span>
-            )}
+            <div className={USER_AVATAR}>{user?.name.slice(0, 1)}</div>
+            {user && <span className={USER_NAME}>{user.name}</span>}
           </div>
+
+          {/* Desktop Logout */}
           <button
-            className="main-button logout-button py-2 px-4 hidden md:block"
+            className={cn(BUTTON_SECONDARY, 'py-2 px-4 hidden md:block')}
             onClick={handleLogout}
             disabled={isLoading}
           >
             {isLoading ? 'Logging out...' : 'Log out'}
           </button>
 
+          {/* Mobile Menu Button */}
           <button
             className="md:hidden"
             onClick={() => setIsNavOpen(!isNavOpen)}
@@ -164,81 +160,48 @@ export default function Header() {
               className="md:hidden fixed inset-0 z-40 flex"
               onClick={() => setIsNavOpen(false)}
             >
-              {/* Backdrop */}
               <div className="absolute inset-0 bg-black/50" />
 
-              {/* Drawer */}
               <div
-                ref={menuRef}
-                className={cn(
-                  'relative ml-auto w-1/2 h-full',
-                  'bg-(--dark-grey)',
-                  'flex flex-col justify-center items-end',
-                  'pt-70',
-                  'px-14',
-                  'pb-10',
-                  'transform transition-transform duration-300 ease-in-out'
-                )}
+                className={DRAWER}
                 onClick={e => e.stopPropagation()}
+                ref={menuRef}
               >
                 {/* Close button */}
                 <button
                   onClick={() => setIsNavOpen(false)}
-                  className={cn(
-                    'absolute',
-                    'top-10.25 right-11.75',
-                    'w-7 h-7',
-                    'flex items-center justify-center'
-                  )}
+                  className={CLOSE_BUTTON}
                   aria-label="Close menu"
                 >
                   <X className="w-4 h-4 text-foreground" />
                 </button>
 
                 <div className="flex flex-col h-full gap-16 items-start mx-auto">
-                  {/* Navigation */}
+                  {/* Mobile Navigation */}
                   <nav className="w-full flex justify-start">
                     <ul className="flex flex-col gap-5">
-                      <li>
-                        <Link
-                          href="/recommended"
-                          onClick={() => setIsNavOpen(false)}
-                          className={cn(
-                            'text-foreground font-medium text-[14px]',
-                            isActiveRoute('/recommended')
-                              ? 'text-foreground border-b-2 border-(--blue)'
-                              : 'text-(--grey1)'
-                          )}
-                        >
-                          Home
-                        </Link>
-                      </li>
-
-                      <li>
-                        <Link
-                          href="/library"
-                          onClick={() => setIsNavOpen(false)}
-                          className={cn(
-                            'text-foreground font-medium text-[14px]',
-                            isActiveRoute('/library')
-                              ? 'text-foreground border-b-2 border-(--blue)'
-                              : 'text-(--grey1)'
-                          )}
-                        >
-                          My Library
-                        </Link>
-                      </li>
+                      {NAV_LINKS.map(link => (
+                        <li key={link.href}>
+                          <NavLink
+                            href={link.href}
+                            label={link.label}
+                            isActive={isActiveRoute(link.href)}
+                            isMobile
+                            onClick={() => setIsNavOpen(false)}
+                          />
+                        </li>
+                      ))}
                     </ul>
                   </nav>
 
-                  {/* Logout */}
+                  {/* Mobile Logout */}
                   <button
                     onClick={async () => {
                       setIsNavOpen(false);
                       await handleLogout();
                     }}
                     disabled={isLoading}
-                    className="main-button logout-button mt-auto"
+                    className={cn(BUTTON_SECONDARY, 'mt-auto')}
                   >
                     {isLoading ? 'Logging out...' : 'Log out'}
                   </button>
