@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { useAuthStore } from '@/stores/auth.store';
@@ -12,6 +12,7 @@ export default function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
+  const pathname = usePathname(); // ✅ Використовуємо правильний хук
 
   useEffect(() => {
     if (isNavOpen) {
@@ -28,6 +29,11 @@ export default function Header() {
   const handleLogout = async () => {
     await logout();
     router.replace('/login');
+  };
+
+  // ✅ Функція для перевірки активного маршруту
+  const isActiveRoute = (route: string) => {
+    return pathname === route || pathname?.startsWith(`${route}/`);
   };
 
   return (
@@ -81,7 +87,7 @@ export default function Header() {
                 className={cn(
                   'hover:text-foreground',
                   'font-medium text-[16px] leading-[112.5%] tracking-[-0.02em] pb-2',
-                  location.pathname === '/recommended'
+                  isActiveRoute('/recommended')
                     ? 'text-foreground border-b-2 border-(--blue)'
                     : 'text-(--grey1)'
                 )}
@@ -95,7 +101,7 @@ export default function Header() {
                 className={cn(
                   'hover:text-foreground',
                   'font-medium text-[16px] leading-[112.5%] tracking-[-0.02em] pb-2',
-                  location.pathname === '/library'
+                  isActiveRoute('/library')
                     ? 'text-foreground border-b-2 border-(--blue)'
                     : 'text-(--grey1)'
                 )}
@@ -167,7 +173,7 @@ export default function Header() {
                 className={cn(
                   'relative ml-auto w-1/2 h-full',
                   'bg-(--dark-grey)',
-                  'flex flex-col justify-center items-end', // ⬅️ центруємо по горизонталі
+                  'flex flex-col justify-center items-end',
                   'pt-70',
                   'px-14',
                   'pb-10',
@@ -199,7 +205,7 @@ export default function Header() {
                           onClick={() => setIsNavOpen(false)}
                           className={cn(
                             'text-foreground font-medium text-[14px]',
-                            location.pathname === '/recommended'
+                            isActiveRoute('/recommended')
                               ? 'text-foreground border-b-2 border-(--blue)'
                               : 'text-(--grey1)'
                           )}
@@ -214,7 +220,7 @@ export default function Header() {
                           onClick={() => setIsNavOpen(false)}
                           className={cn(
                             'text-foreground font-medium text-[14px]',
-                            location.pathname === '/library'
+                            isActiveRoute('/library')
                               ? 'text-foreground border-b-2 border-(--blue)'
                               : 'text-(--grey1)'
                           )}

@@ -3,33 +3,55 @@
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useTransition, FormEvent } from 'react';
+import { useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import type { ObjectSchema } from 'yup';
+import WorkoutStep from '@/components/Dashboard/WorkoutStep';
+
+type FilterFormValues = {
+  title: string;
+  author: string;
+};
+
+const filterSchema: ObjectSchema<FilterFormValues> = yup.object({
+  title: yup.string().default('').trim(),
+  author: yup.string().default('').trim(),
+});
 
 export default function RecommendedDashboard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
-  const [title, setTitle] = useState(searchParams.get('title') || '');
-  const [author, setAuthor] = useState(searchParams.get('author') || '');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FilterFormValues>({
+    resolver: yupResolver(filterSchema),
+    defaultValues: {
+      title: searchParams.get('title') || '',
+      author: searchParams.get('author') || '',
+    },
+  });
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
+  const onSubmit = (data: FilterFormValues) => {
     const params = new URLSearchParams(searchParams.toString());
 
     // Reset to page 1 when applying filters
     params.set('page', '1');
 
     // Set or remove filter params
-    if (title.trim()) {
-      params.set('title', title.trim());
+    if (data.title.trim()) {
+      params.set('title', data.title.trim());
     } else {
       params.delete('title');
     }
 
-    if (author.trim()) {
-      params.set('author', author.trim());
+    if (data.author.trim()) {
+      params.set('author', data.author.trim());
     } else {
       params.delete('author');
     }
@@ -44,68 +66,87 @@ export default function RecommendedDashboard() {
       {/* Filters */}
       <div className={cn('flex flex-row flex-wrap xxl:flex-col gap-5')}>
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           className={cn(
             'flex flex-col gap-2 xxl:gap-2',
             'max-md:w-full max-[1439px]:w-[calc((100%-20px)/2)] xxl:w-full'
           )}
         >
           <p className={cn('pl-2 text-sm font-medium')}>Filters:</p>
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Book title"
-              value={title}
-              onChange={e => setTitle(e.target.value)}
-              disabled={isPending}
-              className={cn(
-                'input',
-                'pl-16.5!',
-                'bg-(--grey3) text-foreground focus:outline-none'
-              )}
-            />
-            <span
-              className={cn(
-                'absolute left-2 top-1/2 -translate-y-1/2',
-                'text-(--grey1) text-[12px] pointer-events-none'
-              )}
-            >
-              Book title
-            </span>
+
+          {/* Book title input */}
+          <div>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Book title"
+                disabled={isPending || isSubmitting}
+                className={cn(
+                  'input',
+                  'pl-16.5!',
+                  'bg-(--grey3) text-foreground focus:outline-none',
+                  errors.title?.message ? 'border border-destructive' : ''
+                )}
+                {...register('title')}
+              />
+              <span
+                className={cn(
+                  'absolute left-2 top-1/2 -translate-y-1/2',
+                  'text-(--grey1) text-[12px] pointer-events-none'
+                )}
+              >
+                Book title
+              </span>
+            </div>
+            {errors.title?.message && (
+              <p className="text-destructive text-[12px] md:text-[14px] mt-1">
+                {errors.title.message as string}
+              </p>
+            )}
           </div>
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Author"
-              value={author}
-              onChange={e => setAuthor(e.target.value)}
-              disabled={isPending}
-              className={cn(
-                'input',
-                'pl-19!',
-                'bg-(--grey3) text-foreground focus:outline-none'
-              )}
-            />
-            <span
-              className={cn(
-                'absolute left-2 top-1/2 -translate-y-1/2',
-                'text-(--grey1) text-[12px] pointer-events-none'
-              )}
-            >
-              The author
-            </span>
+
+          {/* Author input */}
+          <div>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Author"
+                disabled={isPending || isSubmitting}
+                className={cn(
+                  'input',
+                  'pl-19!',
+                  'bg-(--grey3) text-foreground focus:outline-none',
+                  errors.author?.message ? 'border border-destructive' : ''
+                )}
+                {...register('author')}
+              />
+              <span
+                className={cn(
+                  'absolute left-2 top-1/2 -translate-y-1/2',
+                  'text-(--grey1) text-[12px] pointer-events-none'
+                )}
+              >
+                The author
+              </span>
+            </div>
+            {errors.author?.message && (
+              <p className="text-destructive text-[12px] md:text-[14px] mt-1">
+                {errors.author.message as string}
+              </p>
+            )}
           </div>
+
           <button
             type="submit"
-            disabled={isPending}
+            disabled={isPending || isSubmitting}
             className={cn(
               'mt-3',
               'main-button logout-button py-2 px-4',
               'w-30.5!',
-              isPending && 'opacity-50 cursor-not-allowed'
+              (isPending || isSubmitting) && 'opacity-50 cursor-not-allowed'
             )}
           >
-            {isPending ? 'Applying...' : 'To apply'}
+            {isPending || isSubmitting ? 'Applying...' : 'To apply'}
           </button>
         </form>
 
@@ -128,52 +169,16 @@ export default function RecommendedDashboard() {
             Start your workout
           </h2>
           <div className={cn('flex flex-col gap-5', 'mb-5.5')}>
-            <div className="flex gap-3 justify-start items-start flex-1">
-              <div
-                className={cn(
-                  'w-11 h-11 rounded-full bg-foreground',
-                  'flex justify-center items-center',
-                  'text-lg md:text-xl xxl:text-xl',
-                  'text-background font-bold leading-none tracking-[-0.02em]'
-                )}
-              >
-                1
-              </div>
-              <p
-                className={cn(
-                  'w-49.25',
-                  'text-foreground text-sm font-medium leading-[1.28571] tracking-[-0.02em]'
-                )}
-              >
-                Create a personal library:{' '}
-                <span className="text-(--grey1)">
-                  add the books you intend to read to it.
-                </span>
-              </p>
-            </div>
-            <div className="flex gap-3 justify-start items-start flex-1">
-              <div
-                className={cn(
-                  'w-11 h-11 rounded-full bg-foreground',
-                  'flex justify-center items-center',
-                  'text-lg md:text-xl xxl:text-xl',
-                  'text-background font-bold leading-none tracking-[-0.02em]'
-                )}
-              >
-                2
-              </div>
-              <p
-                className={cn(
-                  'w-49.25',
-                  'text-foreground text-sm font-medium leading-[1.28571] tracking-[-0.02em]'
-                )}
-              >
-                Create your first workout:{' '}
-                <span className="text-(--grey1)">
-                  define a goal, choose a period, start training.
-                </span>
-              </p>
-            </div>
+            <WorkoutStep
+              number={1}
+              title="Create a personal library:"
+              description="add the books you intend to read to it."
+            />
+            <WorkoutStep
+              number={2}
+              title="Create your first workout:"
+              description="define a goal, choose a period, start training."
+            />
           </div>
           <div className="flex flex-row justify-between items-center">
             <Link
@@ -185,19 +190,20 @@ export default function RecommendedDashboard() {
             >
               My library
             </Link>
-            <svg width="24" height="24">
-              <use
-                href={'/icons.svg#icon-log-in'}
-                fill="#141414"
-                stroke="#F9F9F9"
-              />
-            </svg>
+            <Link href="/library">
+              <svg width="24" height="24">
+                <use
+                  href={'/icons.svg#icon-log-in'}
+                  fill="#141414"
+                  stroke="#F9F9F9"
+                />
+              </svg>
+            </Link>
           </div>
         </div>
       </div>
 
       {/* Quote */}
-
       <div
         className={cn(
           'hidden xxl:flex',
