@@ -50,3 +50,9 @@ export interface BookDetailsResponse {
 
 export type ActiveProgress = BookProgress & { status: 'active' };
 export type InactiveProgress = BookProgress & { status: 'inactive' };
+
+export interface BookObject {
+  title: string;
+  author: string;
+  totalPages: number;
+}

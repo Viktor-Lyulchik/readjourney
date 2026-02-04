@@ -6,6 +6,7 @@ import {
   FetchRecommendedResponse,
   FetchRecommendedParams,
   BookDetailsResponse,
+  BookObject,
 } from '@/types/book';
 
 import { serializeParams } from '../utils';
@@ -128,5 +129,21 @@ export async function removeBookFromLibrary(bookId: string): Promise<void> {
       );
     }
     throw new Error('Removing book from library failed');
+  }
+}
+
+export async function addBookAsObjectToLibrary(
+  book: BookObject
+): Promise<BookDetailsResponse> {
+  try {
+    const { data } = await nextServer.post(`/books/add`, book);
+    return data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      throw new Error(
+        error.response?.data?.message || 'Adding book to library failed'
+      );
+    }
+    throw new Error('Adding book to library failed');
   }
 }

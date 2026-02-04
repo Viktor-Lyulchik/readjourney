@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     const author = req.nextUrl.searchParams.get('author') ?? '';
     const title = req.nextUrl.searchParams.get('title') ?? '';
 
-    // console.log('Route params:', { page, limit, author, title });
+    console.log('Route params:', { page, limit, author, title });
 
     const apiRes = await api.get('/books/recommend', {
       headers: {
@@ -38,9 +38,9 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    // console.log('Backend response status:', apiRes.status);
-    // console.log('Backend URL:', apiRes.config.url);
-    // console.log('API response:', apiRes.data);
+    console.log('Backend response status:', apiRes.status);
+    console.log('Backend URL:', apiRes.config.url);
+    console.log('API response:', apiRes.data);
 
     return NextResponse.json(apiRes.data, { status: apiRes.status });
   } catch (error) {

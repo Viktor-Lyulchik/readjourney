@@ -4,10 +4,16 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { RecommendedBook } from '@/types/book';
 import { cn } from '@/lib/utils';
-import { HEADING_SM, TEXT_HELPER } from '@/lib/styles/typography.styles';
+import {
+  HEADING_SM,
+  HEADING_XS,
+  TEXT_HELPER,
+  TEXT_HELPER_XS,
+} from '@/lib/styles/typography.styles';
 
 type Props = {
   book: RecommendedBook;
+  variant?: 'default' | 'compact';
 };
 
 // Константи для BookCard
@@ -25,7 +31,7 @@ const IMAGE_STYLES = cn(
   'object-cover transition-transform duration-300 group-hover:scale-105'
 );
 
-export default function BookCard({ book }: Props) {
+export default function BookCard({ book, variant = 'default' }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -46,8 +52,17 @@ export default function BookCard({ book }: Props) {
           className={IMAGE_STYLES}
         />
       </div>
-      <p className={cn(HEADING_SM, 'truncate w-full mb-0.5')}>{book.title}</p>
-      <p className={TEXT_HELPER}>{book.author}</p>
+      <p
+        className={cn(
+          variant === 'compact' ? HEADING_XS : HEADING_SM,
+          'truncate w-full mb-0.5'
+        )}
+      >
+        {book.title}
+      </p>
+      <p className={variant === 'compact' ? TEXT_HELPER_XS : TEXT_HELPER}>
+        {book.author}
+      </p>
     </div>
   );
 }

@@ -19,9 +19,21 @@ export const HEADING_MD = cn(
 
 export const HEADING_SM = cn('text-sm font-bold leading-4.5', BASE_TRACKING);
 
+export const HEADING_XS = cn(
+  'text-[10px] font-bold leading-[1.2]',
+  BASE_TRACKING
+);
+
 // Підзаголовки та описи
 export const SUBTITLE = cn(
   'text-sm font-medium leading-[1.28571]',
+  BASE_TRACKING
+);
+
+export const SUBTITLE_XS = cn(
+  'max-md:text-xs md:text-sm',
+  'font-medium',
+  'max-md:leading-[1.33] md:leading-[1.28571]',
   BASE_TRACKING
 );
 
@@ -48,6 +60,9 @@ export const NAV_LINK_INACTIVE = cn('text-(--grey1)');
 
 // Допоміжний текст (маленький сірий текст)
 export const TEXT_HELPER = cn('text-xs text-(--grey1)');
+
+export const TEXT_HELPER_XS = cn('text-[10px] text-(--grey1)');
+export const TEXT_HELPER_XSS = cn('font-medium text-[10px] text-(--grey1)');
 
 export const TEXT_ERROR = cn('text-destructive text-[12px] md:text-[14px]');
 

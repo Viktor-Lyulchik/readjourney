@@ -1,16 +1,11 @@
 import { isAxiosError } from 'axios';
-import { logErrorResponse } from '../../../_utils/utils';
+import { logErrorResponse } from '../../_utils/utils';
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { api } from '../../../api';
+import { api } from '../../api';
 
-type Props = {
-  params: Promise<{ bookId: string }>;
-};
-
-export async function POST(request: NextRequest, { params }: Props) {
-  const { bookId } = await params;
-
+export async function POST(request: NextRequest) {
+  const body = await request.json();
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
@@ -21,10 +16,7 @@ export async function POST(request: NextRequest, { params }: Props) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
-    // Call your backend API to add book to library
-    // Adjust the endpoint according to your backend API structure
-    // This might be: POST /books/add, POST /library, or POST /books/${bookId}/add
-    const apiRes = await api.post(`/books/add/${bookId}`, {
+    const apiRes = await api.post(`/books/add`, body, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -40,7 +32,7 @@ export async function POST(request: NextRequest, { params }: Props) {
         {
           error:
             error.response?.data?.message ||
-            `Adding book ${bookId} to library failed`,
+            `Adding book ${JSON.stringify(body)} to library failed`,
           response: error.response?.data,
         },
         { status: error.response?.status || 500 }

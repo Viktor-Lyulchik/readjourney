@@ -1,7 +1,7 @@
 import { fetchRecommendedServer } from '@/lib/api/serverApi.server';
 import BooksList from './BooksList';
 import Pagination from './Pagination';
-import BookModal from './BookModal';
+import RecommendedBookModal from '@/components/Modals/RecommendedBookModal';
 import BooksListSkeleton from './BooksListSkeleton';
 import { Suspense } from 'react';
 import { cn } from '@/lib/utils';
@@ -15,6 +15,13 @@ type Props = {
   };
 };
 
+/**
+ * Серверний компонент для відображення рекомендованих книг
+ *
+ * Змінено:
+ * - BookModal замінено на RecommendedBookModal
+ * - RecommendedBookModal використовує універсальний BookModal всередині
+ */
 export default async function RecommendedBooks({ searchParams }: Props) {
   const page = Number(searchParams?.page) || 1;
   const limit = Number(searchParams?.limit) || 10;
@@ -53,7 +60,12 @@ export default async function RecommendedBooks({ searchParams }: Props) {
         <BooksList books={data.results} />
       </Suspense>
 
-      <BookModal />
+      {/* 
+        RecommendedBookModal - обгортка над універсальною BookModal
+        Обробляє логіку відкриття/закриття через URL params
+        та додавання книги до бібліотеки
+      */}
+      <RecommendedBookModal />
     </div>
   );
 }
