@@ -1,68 +1,65 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useBookDetails } from '@/lib/api/queries/books.queries';
 import { useAddBookToLibrary } from '@/lib/api/mutations/library.mutations';
 import BookModal from '@/components/Modals/BookModal';
+import { useRecommendedBooks } from '@/components/Books/RecommendedBooksContext';
 
 /**
- * Клієнтський компонент для відображення модального вікна з деталями книги
- * Використовується в RecommendedBooks для додавання книги до бібліотеки
+ * Client component for displaying a modal window with book details
+ * Used in RecommendedBooks for adding a book to the library
  *
- * Працює через URL query параметр bookId:
- * - При наявності bookId в URL - модалка відкривається
- * - При видаленні bookId з URL - модалка закривається
+ * IMPORTANT CHANGE:
+ * - No longer uses useBookDetails for backend requests
+ * - Book data is obtained from the RecommendedBooksContext context
+ * - The backend endpoint works only with library book IDs, so we use local data
+ *
+ * Works through the URL query parameter bookId:
+ * - When bookId is present in the URL, the modal opens
+ * - When bookId is removed from the URL, the modal closes
  */
 export default function RecommendedBookModal() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const bookId = searchParams.get('bookId');
 
-  // Завантажуємо деталі книги
-  const { data: book, isLoading, error } = useBookDetails(bookId);
+  // Get access to the array of books through the context
+  const { getBookById } = useRecommendedBooks();
 
-  // Mutation для додавання книги до бібліотеки
+  // Get book data from the array instead of requesting from the backend
+  const book = bookId ? getBookById(bookId) : undefined;
+
+  // Mutation for adding a book to the library
   const { mutate: addBook, isPending } = useAddBookToLibrary();
 
-  // Закриття модалки - видаляємо bookId з URL
+  // Close the modal - remove bookId from the URL
   const handleClose = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete('bookId');
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
-  // Додавання книги до бібліотеки
+  // Adding a book to the library
   const handleAddToLibrary = () => {
     if (!bookId) return;
 
     addBook(bookId, {
       onSuccess: () => {
-        // Після успішного додавання закриваємо модалку
+        // After successful addition, close the modal
         handleClose();
       },
     });
   };
 
-  // Якщо немає bookId в URL - не показуємо модалку
+  // If there is no bookId in the URL - do not show the modal
   if (!bookId) return null;
 
-  // Loading state - показуємо простий індикатор
-  if (isLoading) {
+  // If the book is not found in the array - show an error
+  if (!book) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
         <div className="bg-(--dark-grey) rounded-xl p-10">
-          <p className="text-(--grey1)">Loading book details...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Error state - показуємо помилку
-  if (error || !book) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-        <div className="bg-(--dark-grey) rounded-xl p-10">
-          <p className="text-destructive mb-4">Failed to load book details</p>
+          <p className="text-destructive mb-4">Book not found</p>
           <button onClick={handleClose} className="main-button">
             Close
           </button>
@@ -71,7 +68,7 @@ export default function RecommendedBookModal() {
     );
   }
 
-  // Success state - показуємо універсальну модалку
+  // Success state - show the universal modal with data from the array
   return (
     <BookModal
       book={book}

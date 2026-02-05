@@ -14,17 +14,17 @@ const TanStackProvider = ({ children }: Props) => {
       new QueryClient({
         defaultOptions: {
           queries: {
-            // Дані вважаються свіжими протягом 1 хвилини
+            // Data are considered fresh for 1 minute
             staleTime: 60 * 1000,
-            // Дані зберігаються в кеші 5 хвилин
+            // Data are cached for 5 minutes
             gcTime: 5 * 60 * 1000,
-            // Одна спроба повтору при помилці
+            // One retry attempt on error
             retry: 1,
-            // Не рефетчити при фокусі на вікно
+            // Do not refetch on window focus
             refetchOnWindowFocus: false,
           },
           mutations: {
-            // Одна спроба повтору для мутацій
+            // One retry attempt for mutations
             retry: 1,
           },
         },
@@ -34,7 +34,7 @@ const TanStackProvider = ({ children }: Props) => {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {/* DevTools тільки в development режимі */}
+      {/* DevTools only in development mode */}
       {process.env.NODE_ENV === 'development' && (
         <ReactQueryDevtools initialIsOpen={false} />
       )}

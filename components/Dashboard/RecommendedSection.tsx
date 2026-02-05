@@ -5,19 +5,21 @@ import BooksList from '../Books/BooksList';
 import { RecommendedBook } from '@/types/book';
 
 /**
- * Мінімальна секція рекомендованих книг (3 штуки) всередині LibraryDashboard.
- * Заголовок рендеряється батьком — тут тільки список.
+ * Minimal section of recommended books (3 items) inside LibraryDashboard.
+ * The header is rendered by the parent — here is only the list.
  */
 export default function RecommendedSection() {
-  const { data: books, isLoading, isError } = useRecommendedBooks({
+  const {
+    data: books,
+    isLoading,
+    isError,
+  } = useRecommendedBooks({
     page: 1,
     limit: 3,
   });
 
   if (isLoading) {
-    return (
-      <p className="text-sm text-(--grey1)">Loading...</p>
-    );
+    return <p className="text-sm text-(--grey1)">Loading...</p>;
   }
 
   if (isError) {
@@ -30,7 +32,5 @@ export default function RecommendedSection() {
 
   if (booksData.length === 0) return null;
 
-  return (
-    <BooksList books={booksData as RecommendedBook[]} variant="compact" />
-  );
+  return <BooksList books={booksData as RecommendedBook[]} variant="compact" />;
 }

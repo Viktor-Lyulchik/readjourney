@@ -14,13 +14,13 @@ import SuccessModal from '@/components/Modals/SuccessModal';
 type AddBookFormValues = {
   title: string;
   author: string;
-  numberOfPages: string;
+  totalPages: string;
 };
 
 const addBookSchema: ObjectSchema<AddBookFormValues> = yup.object({
   title: yup.string().default('').trim().min(1, 'Book title is required'),
   author: yup.string().default('').trim().min(1, 'Author is required'),
-  numberOfPages: yup
+  totalPages: yup
     .string()
     .default('')
     .trim()
@@ -36,7 +36,7 @@ export default function LibraryDashboard() {
     formState: { errors, isSubmitting },
   } = useForm<AddBookFormValues>({
     resolver: yupResolver(addBookSchema),
-    defaultValues: { title: '', author: '', numberOfPages: '' },
+    defaultValues: { title: '', author: '', totalPages: '' },
   });
 
   const { mutateAsync: addBook, isPending } =
@@ -55,7 +55,7 @@ export default function LibraryDashboard() {
   // --- submit ---
   const onSubmit = async (data: AddBookFormValues) => {
     try {
-      const parsedPages = parseInt(data.numberOfPages, 10);
+      const parsedPages = parseInt(data.totalPages, 10);
 
       await addBook({
         title: data.title.trim(),
@@ -63,18 +63,18 @@ export default function LibraryDashboard() {
         totalPages: Number.isNaN(parsedPages) ? 0 : parsedPages,
       });
 
-      // Зберігаємо назву книги для модалки, потім reset
+      // Save the book title for the modal, then reset
       const bookTitle = data.title.trim();
       reset();
 
-      // Показуємо SuccessModal
+      // Show SuccessModal
       setSuccessModal({ isOpen: true, title: bookTitle });
     } catch {
-      // toast обробляється всередині мутації
+      // toast is handled inside the mutation
     }
   };
 
-  // --- спільні стилі інпутів ---
+  // --- shared input styles ---
   const inputBase = cn(
     'input',
     'bg-(--grey3) text-foreground focus:outline-none'
@@ -88,7 +88,7 @@ export default function LibraryDashboard() {
   return (
     <div className={cn('flex flex-col gap-5', 'pt-5')}>
       <div className={cn('flex flex-row flex-wrap xxl:flex-col gap-5')}>
-        {/* ─── Форма AddBook ─── */}
+        {/* ─── AddBook form ─── */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className={cn(
@@ -120,7 +120,7 @@ export default function LibraryDashboard() {
             )}
           </div>
 
-          {/* The author */}
+          {/* Author */}
           <div>
             <div className="relative">
               <input
@@ -151,14 +151,14 @@ export default function LibraryDashboard() {
                 className={cn(
                   inputBase,
                   'pl-29!',
-                  errors.numberOfPages && 'border border-destructive'
+                  errors.totalPages && 'border border-destructive'
                 )}
-                {...register('numberOfPages')}
+                {...register('totalPages')}
               />
               <span className={labelBase}>Number of pages</span>
             </div>
-            {errors.numberOfPages && (
-              <p className={errorBase}>{errors.numberOfPages.message}</p>
+            {errors.totalPages && (
+              <p className={errorBase}>{errors.totalPages.message}</p>
             )}
           </div>
 

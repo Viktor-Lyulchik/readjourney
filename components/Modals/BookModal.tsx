@@ -4,20 +4,24 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { BookDetailsResponse } from '@/types/book';
-import { useBookDetails } from '@/lib/api/queries/books.queries';
+import { BookDetailsResponse, RecommendedBook } from '@/types/book';
 import { CARD_CONTAINER } from '@/lib/styles/containers.styles';
 import { HEADING_MD } from '@/lib/styles/typography.styles';
 
 /**
- * Універсальний компонент модального вікна для відображення деталей книги
+ * Universal component for displaying book details in a modal window
  *
- * Підтримує два режими використання:
- * 1. MyLibrary - показує кнопку "Start reading" для переходу до читання
- * 2. RecommendedBooks - показує кнопку "Add to library" для додавання книги
+ * Supports two usage modes:
+ * 1. MyLibrary - shows "Start reading" button for reading
+ * 2. RecommendedBooks - shows "Add to library" button for adding a book
+ *
+ * IMPORTANT CHANGE:
+ * - No longer makes additional requests through useBookDetails
+ * - Uses only data passed through props
+ * - The book type can now be either BookDetailsResponse or RecommendedBook
  *
  * @example
- * // Використання в MyLibrary
+ * // Usage in MyLibrary
  * <BookModal
  *   book={selectedBook}
  *   isOpen={!!selectedBook}
@@ -27,7 +31,7 @@ import { HEADING_MD } from '@/lib/styles/typography.styles';
  * />
  *
  * @example
- * // Використання в RecommendedBooks
+ * // Usage in RecommendedBooks
  * <BookModal
  *   book={book}
  *   isOpen={isOpen}
@@ -41,17 +45,17 @@ import { HEADING_MD } from '@/lib/styles/typography.styles';
 type ActionType = 'start-reading' | 'add-to-library';
 
 type Props = {
-  /** Об'єкт книги для відображення */
-  book: BookDetailsResponse;
-  /** Чи відкрита модалка */
+  /** Book object to display (BookDetailsResponse or RecommendedBook) */
+  book: BookDetailsResponse | RecommendedBook;
+  /** Whether the modal is open */
   isOpen: boolean;
-  /** Callback для закриття модалки */
+  /** Callback to close the modal */
   onClose: () => void;
-  /** Тип дії кнопки: "start-reading" або "add-to-library" */
+  /** Button action type: "start-reading" or "add-to-library" */
   actionType: ActionType;
-  /** Callback для основної дії (читання або додавання) */
+  /** Callback for the main action (reading or adding) */
   onAction: () => void;
-  /** Стан очікування для кнопки дії (опціонально) */
+  /** Pending state for the action button (optional) */
   actionPending?: boolean;
 };
 
@@ -63,14 +67,7 @@ export default function BookModal({
   onAction,
   actionPending = false,
 }: Props) {
-  // Завантажуємо повні деталі книги з сервера
-  // Використовуємо book._id для запиту, якщо модалка відкрита
-  const { data: fullBook } = useBookDetails(isOpen ? book._id : null);
-
-  // Використовуємо повні дані якщо вони завантажені, інакше базові з props
-  const displayBook = fullBook || book;
-
-  // Обробка клавіші ESC для закриття модалки
+  // Handling ESC key to close the modal
   useEffect(() => {
     if (!isOpen) return;
 
@@ -81,10 +78,10 @@ export default function BookModal({
     return () => document.removeEventListener('keydown', onKey);
   }, [isOpen, onClose]);
 
-  // Не рендеримо, якщо модалка закрита
+  // Do not render if the modal is closed
   if (!isOpen) return null;
 
-  // Визначаємо текст кнопки в залежності від типу дії
+  // Determine button text based on action type
   const buttonText = (() => {
     if (actionType === 'start-reading') {
       return 'Start reading';
@@ -110,7 +107,7 @@ export default function BookModal({
         )}
         onClick={e => e.stopPropagation()}
       >
-        {/* Кнопка закриття */}
+        {/* Close button */}
         <button
           onClick={onClose}
           className="absolute top-6 right-6 text-foreground hover:opacity-70 transition-opacity"
@@ -120,7 +117,7 @@ export default function BookModal({
         </button>
 
         <div className="flex flex-col justify-center items-center text-center">
-          {/* Обкладинка книги */}
+          {/* Book cover */}
           <div
             className={cn(
               'relative rounded-lg overflow-hidden shrink-0',
@@ -128,29 +125,29 @@ export default function BookModal({
               'mb-4'
             )}
           >
-            {displayBook.imageUrl ? (
+            {book.imageUrl ? (
               <Image
-                src={displayBook.imageUrl}
-                alt={displayBook.title}
+                src={book.imageUrl}
+                alt={book.title}
                 fill
                 className="object-cover"
               />
             ) : (
-              // Fallback для книг без обкладинки
+              // Fallback for books without a cover
               <div className="w-full h-full bg-(--grey3) flex items-center justify-center">
                 <span className="text-4xl">📖</span>
               </div>
             )}
           </div>
 
-          {/* Інформаційний блок */}
+          {/* Information block */}
           <div
             className={cn(
               'flex flex-col items-center w-full',
               'mb-5 md:mb-8 xxl:mb-8'
             )}
           >
-            {/* Назва книги */}
+            {/* Book title */}
             <h2
               className={cn(
                 HEADING_MD,
@@ -158,31 +155,31 @@ export default function BookModal({
                 'mb-2 xxl:mb-2'
               )}
             >
-              {displayBook.title}
+              {book.title}
             </h2>
 
-            {/* Автор */}
+            {/* Author */}
             <p
               className={cn(
                 'text-xs md:text-sm/4.5 font-medium tracking-[-0.02em] text-(--grey1)',
                 'mb-1 xxl:mb-1'
               )}
             >
-              {displayBook.author}
+              {book.author}
             </p>
 
-            {/* Кількість сторінок */}
+            {/* Number of pages */}
             <p
               className={cn(
                 'text-foreground',
                 'text-[10px]/[12px] font-medium tracking-[-0.02em]'
               )}
             >
-              {displayBook.totalPages} pages
+              {book.totalPages} pages
             </p>
           </div>
 
-          {/* Кнопка дії (Start reading / Add to library) */}
+          {/* Action button (Start reading / Add to library) */}
           <button
             onClick={onAction}
             disabled={actionPending}
@@ -193,7 +190,7 @@ export default function BookModal({
               'rounded-full border border-(--grey1)',
               'text-foreground font-bold text-sm md:text-base leading-[1.28571] md:leading-tight',
               'hover:bg-foreground hover:text-background transition-all duration-300',
-              // Стилі для disabled стану
+              // Styles for disabled state
               actionPending && 'opacity-50 cursor-not-allowed'
             )}
           >

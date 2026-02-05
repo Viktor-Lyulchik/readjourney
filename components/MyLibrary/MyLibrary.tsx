@@ -40,8 +40,8 @@ export default function MyLibrary() {
     removeBook(bookId);
   };
 
-  // --- action handler для модалки ---
-  // Обробник для кнопки "Start reading" - переходить на сторінку читання
+  // --- action handler for modal ---
+  // Handler for "Start reading" button - navigates to the reading page
   const handleStartReading = () => {
     if (selectedBook) {
       router.push(`/reading/${selectedBook._id}`);
@@ -82,9 +82,9 @@ export default function MyLibrary() {
       )}
 
       {/* 
-        Універсальна BookModal у режимі "start-reading"
-        - actionType="start-reading" - визначає текст кнопки
-        - onAction викликається при натисканні кнопки
+        Universal BookModal in "start-reading" mode
+        - actionType="start-reading" - determines the button text
+        - onAction is called when the button is clicked
       */}
       {selectedBook && (
         <BookModal

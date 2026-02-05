@@ -5,6 +5,7 @@ import RecommendedBookModal from '@/components/Modals/RecommendedBookModal';
 import BooksListSkeleton from './BooksListSkeleton';
 import { Suspense } from 'react';
 import { cn } from '@/lib/utils';
+import { RecommendedBooksProvider } from './RecommendedBooksContext';
 
 type Props = {
   searchParams?: {
@@ -16,11 +17,11 @@ type Props = {
 };
 
 /**
- * Серверний компонент для відображення рекомендованих книг
+ * Server component for displaying recommended books with pagination.
  *
- * Змінено:
- * - BookModal замінено на RecommendedBookModal
- * - RecommendedBookModal використовує універсальний BookModal всередині
+ * Changes:
+ * - Added RecommendedBooksProvider to pass the array of books to the modal
+ * - Book data is now taken from the context instead of backend requests
  */
 export default async function RecommendedBooks({ searchParams }: Props) {
   const page = Number(searchParams?.page) || 1;
@@ -37,35 +38,38 @@ export default async function RecommendedBooks({ searchParams }: Props) {
   }
 
   return (
-    <div
-      className={cn(
-        'flex flex-col',
-        'bg-(--dark-grey)',
-        'rounded-2xl',
-        'p-10 px-5 md:px-10 xxl:px-10'
-      )}
-    >
+    <RecommendedBooksProvider books={data.results}>
       <div
         className={cn(
-          'flex flex-row justify-between items-start',
-          'mb-5.5 md:mb-5'
+          'flex flex-col',
+          'bg-(--dark-grey)',
+          'rounded-2xl',
+          'p-10 px-5 md:px-10 xxl:px-10'
         )}
       >
-        <h1 className={cn('text-[28px] font-bold leading-8 tracking-[0.02em]')}>
-          Recommended
-        </h1>
-        <Pagination page={data.page} totalPages={data.totalPages} />
-      </div>
-      <Suspense fallback={<BooksListSkeleton />}>
-        <BooksList books={data.results} />
-      </Suspense>
+        <div
+          className={cn(
+            'flex flex-row justify-between items-start',
+            'mb-5.5 md:mb-5'
+          )}
+        >
+          <h1
+            className={cn('text-[28px] font-bold leading-8 tracking-[0.02em]')}
+          >
+            Recommended
+          </h1>
+          <Pagination page={data.page} totalPages={data.totalPages} />
+        </div>
+        <Suspense fallback={<BooksListSkeleton />}>
+          <BooksList books={data.results} />
+        </Suspense>
 
-      {/* 
-        RecommendedBookModal - обгортка над універсальною BookModal
-        Обробляє логіку відкриття/закриття через URL params
-        та додавання книги до бібліотеки
-      */}
-      <RecommendedBookModal />
-    </div>
+        {/* 
+          RecommendedBookModal now receives data from the context
+          It does not make a backend request but uses data from the books array
+        */}
+        <RecommendedBookModal />
+      </div>
+    </RecommendedBooksProvider>
   );
 }

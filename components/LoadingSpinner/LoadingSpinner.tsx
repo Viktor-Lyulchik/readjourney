@@ -16,8 +16,8 @@ const SPINNER_SIZES = {
 };
 
 /**
- * Компонент loading spinner
- * Використовується для індикації завантаження
+ * Component for loading spinner
+ * Used to indicate loading states in the UI
  */
 export default function LoadingSpinner({
   message = 'Loading...',

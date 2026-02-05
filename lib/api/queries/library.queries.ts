@@ -3,15 +3,15 @@ import { fetchLibraryBooks } from '../clientApi';
 import { queryKeys } from '../queryKeys';
 
 /**
- * Hook для отримання всіх книг з бібліотеки користувача
- * Автоматично рефетчиться після додавання/видалення книг
+ * Hook for fetching all books from the user's library
+ * Automatically refetches after adding/removing books
  */
 export const useLibraryBooks = () => {
   return useQuery({
     queryKey: queryKeys.library.books(),
     queryFn: fetchLibraryBooks,
-    staleTime: 1 * 60 * 1000, // 1 хвилина
-    // Автоматично рефетчити при монтуванні компонента
+    staleTime: 1 * 60 * 1000, // 1 minute for library books
+    // Automatically refetch on component mount
     refetchOnMount: true,
   });
 };

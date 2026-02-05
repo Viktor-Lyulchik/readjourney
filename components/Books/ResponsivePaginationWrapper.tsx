@@ -17,11 +17,11 @@ export default function ResponsivePaginationWrapper({ children }: Props) {
       let newLimit: number;
 
       if (width < 768) {
-        newLimit = 2; // Мобілка
+        newLimit = 2; // mobile
       } else if (width < 1440) {
-        newLimit = 4; // Планшет
+        newLimit = 4; // tablet
       } else {
-        newLimit = 10; // Десктоп
+        newLimit = 10; // desktop
       }
 
       const currentLimit = Number(searchParams.get('limit')) || 10;
@@ -29,7 +29,7 @@ export default function ResponsivePaginationWrapper({ children }: Props) {
       if (currentLimit !== newLimit) {
         const params = new URLSearchParams(searchParams.toString());
         params.set('limit', String(newLimit));
-        params.set('page', '1'); // Скидаємо на першу сторінку при зміні limit
+        params.set('page', '1'); // Reset to the first page when limit changes
         router.replace(`?${params.toString()}`);
       }
     };

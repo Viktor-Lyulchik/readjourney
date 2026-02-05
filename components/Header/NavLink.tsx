@@ -18,9 +18,9 @@ type NavLinkProps = {
 };
 
 /**
- * Компонент навігаційного посилання
- * Використовується в Header для Desktop та Mobile навігації
- * Уникає дублювання стилів між desktop та mobile версіями
+ * Component for navigation links in the header.
+ * Used in Header for both Desktop and Mobile navigation
+ * Avoids duplication of styles between desktop and mobile versions
  */
 export default function NavLink({
   href,
@@ -34,9 +34,9 @@ export default function NavLink({
       href={href}
       onClick={onClick}
       className={cn(
-        // Базові стилі залежно від платформи
+        // Base styles depending on platform
         isMobile ? NAV_LINK_MOBILE : NAV_LINK_DESKTOP,
-        // Стан активності
+        // Active state styles
         isActive ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE
       )}
     >

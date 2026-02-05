@@ -1,11 +1,11 @@
 import { FetchRecommendedParams } from '@/types/book';
 
 /**
- * Централізовані ключі для React Query
- * Використовуємо їх для кешування та інвалідації
+ * Centralized keys for React Query
+ * Used for caching and invalidation
  */
 export const queryKeys = {
-  // Книги (рекомендовані)
+  // Books (recommended, details, etc.)
   books: {
     all: ['books'] as const,
     recommended: (params: FetchRecommendedParams) =>
@@ -13,14 +13,14 @@ export const queryKeys = {
     details: (id: string) => [...queryKeys.books.all, 'details', id] as const,
   },
 
-  // Бібліотека користувача
+  // User's library
   library: {
     all: ['library'] as const,
     books: () => [...queryKeys.library.all, 'books'] as const,
     book: (id: string) => [...queryKeys.library.all, 'book', id] as const,
   },
 
-  // Авторизація
+  // Authorization and user info
   auth: {
     user: ['auth', 'user'] as const,
   },

@@ -8,7 +8,7 @@ type Props = {
   children: ReactNode;
 };
 
-// Специфічні стилі для Dashboard
+// Specific styles for Dashboard
 const DASHBOARD_STYLES = cn('w-full xxl:w-88', 'shrink-0');
 
 export default function Dashboard({ children }: Props) {

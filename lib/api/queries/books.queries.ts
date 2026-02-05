@@ -4,26 +4,26 @@ import { queryKeys } from '../queryKeys';
 import { FetchRecommendedParams } from '@/types/book';
 
 /**
- * Hook для отримання рекомендованих книг
- * Автоматично кешує результати на основі параметрів
+ * Hook for fetching recommended books
+ * Automatically caches results based on parameters
  */
 export const useRecommendedBooks = (params: FetchRecommendedParams) => {
   return useQuery({
     queryKey: queryKeys.books.recommended(params),
     queryFn: () => fetchRecommended(params),
-    staleTime: 2 * 60 * 1000, // 2 хвилини для списку книг
+    staleTime: 2 * 60 * 1000, // 2 minutes for the book list
   });
 };
 
 /**
- * Hook для отримання деталей книги
- * Використовується в модальному вікні
+ * Hook for fetching book details
+ * Used in a modal window
  */
 export const useBookDetails = (bookId: string | null) => {
   return useQuery({
     queryKey: queryKeys.books.details(bookId || ''),
     queryFn: () => fetchBookDetails(bookId!),
-    enabled: !!bookId, // Запит тільки якщо є ID
-    staleTime: 5 * 60 * 1000, // 5 хвилин для деталей книги
+    enabled: !!bookId, // Fetch only if there is an ID
+    staleTime: 5 * 60 * 1000, // 5 minutes for book details
   });
 };

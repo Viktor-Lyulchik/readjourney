@@ -14,7 +14,7 @@ import {
 } from '@/lib/styles/containers.styles';
 import { BUTTON_SECONDARY } from '@/lib/styles/buttons.styles';
 
-// Константи для Header
+// Constants for Header
 const HEADER_HEIGHT = cn(
   'h-18.5 md:h-26.5 xxl:26.5',
   'bg-background',
@@ -55,7 +55,7 @@ const CLOSE_BUTTON = cn(
   'flex items-center justify-center'
 );
 
-// Навігаційні лінки (data для рендерингу)
+// Navigation links (data for rendering)
 const NAV_LINKS = [
   { href: '/recommended', label: 'Home' },
   { href: '/library', label: 'My Library' },

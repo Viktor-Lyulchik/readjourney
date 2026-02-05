@@ -1,14 +1,16 @@
 import { cn } from '@/lib/utils';
 
 /**
- * Константи для повторюваних стилів типографіки
- * Використовуйте їх замість дублювання однакових комбінацій
+ * Constants for reusable typography styles
+ * Use them instead of duplicating the same combinations of classes in different components.
+ * This way, if you need to change a style, you can do it in one place.
+ * Also, it improves readability and maintainability of the code.
  */
 
-// Базові налаштування (tracking використовується СКРІЗЬ)
+// Base settings (tracking is used EVERYWHERE)
 const BASE_TRACKING = 'tracking-[-0.02em]';
 
-// Заголовки
+// Headings
 export const HEADING_LG = cn('text-[28px] font-bold leading-8', BASE_TRACKING);
 
 export const HEADING_MD = cn(
@@ -24,7 +26,7 @@ export const HEADING_XS = cn(
   BASE_TRACKING
 );
 
-// Підзаголовки та описи
+// Subheadings and descriptions
 export const SUBTITLE = cn(
   'text-sm font-medium leading-[1.28571]',
   BASE_TRACKING
@@ -39,7 +41,7 @@ export const SUBTITLE_XS = cn(
 
 export const SUBTITLE_GREY = cn(SUBTITLE, 'text-(--grey1)');
 
-// Текст для навігації/посилань
+// Text for navigation/links
 export const NAV_LINK_BASE = cn(
   'font-medium',
   BASE_TRACKING,
@@ -53,12 +55,12 @@ export const NAV_LINK_DESKTOP = cn(
 
 export const NAV_LINK_MOBILE = cn(NAV_LINK_BASE, 'text-[14px]');
 
-// Стани для навігаційних лінків
+// States for navigation links
 export const NAV_LINK_ACTIVE = cn('text-foreground border-b-2 border-(--blue)');
 
 export const NAV_LINK_INACTIVE = cn('text-(--grey1)');
 
-// Допоміжний текст (маленький сірий текст)
+// Helper text (small grey text used for hints, errors, etc.)
 export const TEXT_HELPER = cn('text-xs text-(--grey1)');
 
 export const TEXT_HELPER_XS = cn('text-[10px] text-(--grey1)');
@@ -66,7 +68,7 @@ export const TEXT_HELPER_XSS = cn('font-medium text-[10px] text-(--grey1)');
 
 export const TEXT_ERROR = cn('text-destructive text-[12px] md:text-[14px]');
 
-// Body текст
+// Body text
 export const TEXT_BODY = cn('text-sm font-medium', BASE_TRACKING);
 
 export const TEXT_BODY_GREY = cn(TEXT_BODY, 'text-(--grey1)');

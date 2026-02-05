@@ -16,7 +16,7 @@ type Props = {
   variant?: 'default' | 'compact';
 };
 
-// Константи для BookCard
+// Constants for BookCard
 const CARD_HOVER = cn(
   'cursor-pointer hover:scale-105 transition-all duration-250 ease-in-out',
   'flex flex-col'

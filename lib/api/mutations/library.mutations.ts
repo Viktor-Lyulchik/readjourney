@@ -9,8 +9,8 @@ import { toast } from 'sonner';
 import { BookObject } from '@/types/book';
 
 /**
- * Mutation для додавання книги до бібліотеки
- * Автоматично інвалідує кеш бібліотеки після успішного додавання
+ * Mutation for adding a book to the library
+ * Automatically invalidates the library cache after successful addition
  */
 export const useAddBookToLibrary = () => {
   const queryClient = useQueryClient();
@@ -18,13 +18,13 @@ export const useAddBookToLibrary = () => {
   return useMutation({
     mutationFn: (bookId: string) => addBookToLibrary(bookId),
     onSuccess: data => {
-      // Інвалідуємо список книг бібліотеки - це спричинить автоматичний рефетч
+      // Invalidate the library books list - this will trigger an automatic refetch
       queryClient.invalidateQueries({
         queryKey: queryKeys.library.books(),
       });
 
-      // Також інвалідуємо рекомендовані книги (опціонально)
-      // щоб оновити статус книги в списку рекомендованих
+      // Also invalidate recommended books (optional)
+      // to update the status of the book in the recommended list
       queryClient.invalidateQueries({
         queryKey: queryKeys.books.all,
       });
@@ -43,13 +43,13 @@ export const useAddBookAsObjectToLibrary = () => {
   return useMutation({
     mutationFn: (book: BookObject) => addBookAsObjectToLibrary(book),
     onSuccess: data => {
-      // Інвалідуємо список книг бібліотеки - це спричинить автоматичний рефетч
+      // Invalidate the library books list - this will trigger an automatic refetch
       queryClient.invalidateQueries({
         queryKey: queryKeys.library.books(),
       });
 
-      // Також інвалідуємо рекомендовані книги (опціонально)
-      // щоб оновити статус книги в списку рекомендованих
+      // Also invalidate recommended books (optional)
+      // to update the status of the book in the recommended list
       queryClient.invalidateQueries({
         queryKey: queryKeys.books.all,
       });
@@ -76,7 +76,7 @@ export const useAddBookAsObjectToLibraryOptimistic = () => {
 
       const previousBooks = queryClient.getQueryData(queryKeys.library.books());
 
-      // Створюємо тимчасову optimistic книгу
+      // Create a temporary optimistic book entry
       const optimisticBook = {
         _id: `temp-${Date.now()}`,
         title: newBook.title,
@@ -119,8 +119,8 @@ export const useAddBookAsObjectToLibraryOptimistic = () => {
 };
 
 /**
- * Mutation для видалення книги з бібліотеки
- * Автоматично інвалідує кеш бібліотеки після успішного видалення
+ * Mutation for removing a book from the library
+ * Automatically invalidates the library cache after successful removal
  */
 export const useRemoveBookFromLibrary = () => {
   const queryClient = useQueryClient();
@@ -128,12 +128,12 @@ export const useRemoveBookFromLibrary = () => {
   return useMutation({
     mutationFn: (bookId: string) => removeBookFromLibrary(bookId),
     onSuccess: () => {
-      // Інвалідуємо список книг бібліотеки
+      // Invalidate the library books list
       queryClient.invalidateQueries({
         queryKey: queryKeys.library.books(),
       });
 
-      // Також інвалідуємо рекомендовані книги
+      // Also invalidate recommended books
       queryClient.invalidateQueries({
         queryKey: queryKeys.books.all,
       });
@@ -147,31 +147,31 @@ export const useRemoveBookFromLibrary = () => {
 };
 
 /**
- * Mutation з optimistic update для миттєвого відгуку UI
- * Використовуєм цей варіант для кращого UX
+ * Mutation with optimistic update for immediate UI feedback
+ * We use this variant for better UX
  */
 export const useAddBookToLibraryOptimistic = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (bookId: string) => addBookToLibrary(bookId),
-    // Optimistic update - оновлюємо UI до того як сервер відповість
+    // Optimistic update - update UI before the server responds
     onMutate: async bookId => {
-      // Скасовуємо всі поточні рефетчі щоб не перезаписати наш optimistic update
+      // Cancel any ongoing refetches so they don't overwrite our optimistic update
       await queryClient.cancelQueries({
         queryKey: queryKeys.library.books(),
       });
 
-      // Зберігаємо попередній стан для rollback у випадку помилки
+      // Save the previous state for rollback in case of error
       const previousBooks = queryClient.getQueryData(queryKeys.library.books());
 
-      // Optimistically оновлюємо кеш
-      // (тут би додали нову книгу, але нам потрібна повна інформація про книгу)
+      // Optimistically update the cache
+      // (here we would add the new book, but we need full book information)
 
       return { previousBooks };
     },
     onError: (err, bookId, context) => {
-      // Rollback до попереднього стану
+      // Rollback to previous state
       if (context?.previousBooks) {
         queryClient.setQueryData(
           queryKeys.library.books(),
@@ -183,7 +183,7 @@ export const useAddBookToLibraryOptimistic = () => {
     onSuccess: () => {
       toast.success('Book added to library! 📚');
     },
-    // Завжди рефетчимо після success або error
+    // Always refetch after success or error
     onSettled: () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.library.books(),
@@ -191,5 +191,3 @@ export const useAddBookToLibraryOptimistic = () => {
     },
   });
 };
-
-// useAddOwnBook;

@@ -24,11 +24,15 @@ export async function POST(request: NextRequest, { params }: Props) {
     // Call your backend API to add book to library
     // Adjust the endpoint according to your backend API structure
     // This might be: POST /books/add, POST /library, or POST /books/${bookId}/add
-    const apiRes = await api.post(`/books/add/${bookId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const apiRes = await api.post(
+      `/books/add/${bookId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     console.log('Book added successfully:', apiRes.data);
 

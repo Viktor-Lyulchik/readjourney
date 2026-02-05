@@ -9,21 +9,21 @@ type Props = {
   className?: string;
 };
 
-// Стилі для різних статусів
+// Styles for different statuses
 const STATUS_STYLES: Record<BookStatus, string> = {
   'in-progress': 'text-(--blue)',
   done: 'text-(--green)',
   unread: 'text-(--grey1)',
 };
 
-// Іконки для статусів
+// Icons for different statuses
 const STATUS_ICONS: Record<BookStatus, string> = {
   'in-progress': '⏳',
   done: '✓',
   unread: '📚',
 };
 
-// Текст для статусів
+// Text for different statuses
 const STATUS_TEXT: Record<BookStatus, string> = {
   'in-progress': 'In progress',
   done: 'Completed',
@@ -31,8 +31,8 @@ const STATUS_TEXT: Record<BookStatus, string> = {
 };
 
 /**
- * Компонент для відображення статусу книги
- * Уникає дублювання if/else для статусів
+ * Component for displaying book status badge.
+ * Avoids duplication of if/else for statuses
  */
 export default function StatusBadge({ status, className }: Props) {
   return (
