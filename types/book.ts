@@ -22,6 +22,7 @@ export interface FetchRecommendedParams {
 }
 
 export interface BookProgress {
+  _id: string;
   startPage: number;
   startReading: string;
   finishPage?: number;

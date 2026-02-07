@@ -147,3 +147,63 @@ export async function addBookAsObjectToLibrary(
     throw new Error('Adding book to library failed');
   }
 }
+
+// Reading API functions
+export async function startReading(
+  bookId: string,
+  page: number
+): Promise<BookDetailsResponse> {
+  try {
+    const { data } = await nextServer.post('/books/reading/start', {
+      id: bookId,
+      page,
+    });
+    return data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      throw new Error(
+        error.response?.data?.message || 'Starting reading failed'
+      );
+    }
+    throw new Error('Starting reading failed');
+  }
+}
+
+export async function finishReading(
+  bookId: string,
+  page: number
+): Promise<BookDetailsResponse> {
+  try {
+    const { data } = await nextServer.post('/books/reading/finish', {
+      id: bookId,
+      page,
+    });
+    return data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      throw new Error(
+        error.response?.data?.message || 'Finishing reading failed'
+      );
+    }
+    throw new Error('Finishing reading failed');
+  }
+}
+
+export async function deleteReading(
+  bookId: string,
+  readingId: string
+): Promise<BookDetailsResponse> {
+  try {
+    const { data } = await nextServer.delete('/books/reading', {
+      params: { bookId, readingId },
+    });
+    return data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      throw new Error(
+        error.response?.data?.message || 'Deleting reading failed'
+      );
+    }
+    throw new Error('Deleting reading failed');
+  }
+}

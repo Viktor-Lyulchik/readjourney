@@ -58,11 +58,7 @@ export default function LibraryBookCard({ book, onDetails, onRemove }: Props) {
           onClick={() => onRemove(book._id)}
         >
           <svg width="16" height="16">
-            <use
-              href={'/icons.svg#icon-trash'}
-              fill="#e85050/20"
-              stroke="#e85050"
-            />
+            <use href={'/icons.svg#icon-trash'} fill="none" stroke="#e85050" />
           </svg>
         </button>
       </div>
