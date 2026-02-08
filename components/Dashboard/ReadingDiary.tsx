@@ -58,19 +58,24 @@ export default function ReadingDiary({ bookId, progress, totalPages }: Props) {
   return (
     <div className={cn('bg-(--grey3) rounded-[15px] p-5')}>
       <div
-        className={cn('max-h-[373px] overflow-y-auto pr-2 custom-scrollbar')}
+        className={cn('max-h-[333px] overflow-y-auto pr-2 custom-scrollbar')}
       >
         <div className={cn('flex flex-col gap-5.5')}>
           {groups.map((group, groupIndex) => (
-            <div key={group.date} className={cn('flex flex-col gap-4')}>
+            <div
+              key={group.date}
+              className={cn('flex flex-col gap-4 md:gap-4.5')}
+            >
               {/* Header of the day */}
               <div
-                className={cn('flex items-center justify-between pl-0 pr-7')}
+                className={cn(
+                  'flex items-center justify-between pl-0 pr-9.5 md:pr-7'
+                )}
               >
-                <div className={cn('flex items-center gap-2.5')}>
+                <div className={cn('flex items-center gap-2.25 md:gap-2.5')}>
                   <div
                     className={cn(
-                      'w-5 h-5 border-4 rounded flex items-center justify-center transition-colors',
+                      'w-4 h-4 md:w-5 md:h-5 border-4 rounded flex items-center justify-center transition-colors',
                       groupIndex === 0
                         ? 'border-foreground'
                         : 'border-(--grey1)'
@@ -79,7 +84,7 @@ export default function ReadingDiary({ bookId, progress, totalPages }: Props) {
                   <span
                     className={cn(
                       'transition-colors',
-                      'font-bold text-base leading-[1.125] tracking-[0.02em]',
+                      'font-bold text-xs md:text-base max-md:leading-[1.33] md:leading-[1.125] tracking-[0.02em]',
                       groupIndex === 0 ? 'text-foreground' : 'text-(--grey1)'
                     )}
                   >
@@ -88,8 +93,8 @@ export default function ReadingDiary({ bookId, progress, totalPages }: Props) {
                 </div>
                 <span
                   className={cn(
-                    'text-(--grey1) text-sm',
-                    'font-medium leading-[1.28571] tracking-[-0.02em]'
+                    'text-(--grey1)',
+                    'text-xs md:text-sm font-medium max-md:leading-[1.33] md:leading-[1.28571] tracking-[-0.02em]'
                   )}
                 >
                   {group.totalPagesInDay} pages
@@ -99,7 +104,7 @@ export default function ReadingDiary({ bookId, progress, totalPages }: Props) {
               {/* List of sessions */}
               <div
                 className={cn(
-                  'relative flex flex-col gap-7 ml-2 pl-6 border-l-2 border-background'
+                  'relative flex flex-col gap-4 md:gap-7 ml-2 pl-6 border-l-2 border-background'
                 )}
               >
                 {group.sessions.map((session, sIndex) => {
@@ -121,14 +126,14 @@ export default function ReadingDiary({ bookId, progress, totalPages }: Props) {
                     <div
                       key={sIndex}
                       className={cn(
-                        'grid grid-cols-[1fr_59px_20px] items-start gap-x-2'
+                        'grid grid-cols-[1fr_43px_16px] md:grid-cols-[1fr_59px_20px] items-start gap-x-1.5 md:gap-x-2'
                       )}
                     >
                       <div className={cn('flex flex-col pt-1.5')}>
                         <span
                           className={cn(
                             'text-foreground',
-                            'font-medium text-xl leading-none tracking-[-0.02em]',
+                            'font-medium text-sm md:text-xl max-md:leading-[1.28571] md:leading-none tracking-[-0.02em]',
                             'mb-2'
                           )}
                         >
@@ -137,7 +142,7 @@ export default function ReadingDiary({ bookId, progress, totalPages }: Props) {
                         <span
                           className={cn(
                             'text-(--grey1) ',
-                            'font-medium text-xs leading-[1.16667] tracking-[-0.02em]'
+                            'font-medium text-[10px] md:text-xs max-md:leading-[1.2] md:leading-[1.16667] tracking-[-0.02em]'
                           )}
                         >
                           {durationMinutes} minutes
@@ -147,8 +152,8 @@ export default function ReadingDiary({ bookId, progress, totalPages }: Props) {
                       <div className={cn('flex flex-col gap-1 items-center')}>
                         <div
                           className={cn(
-                            'w-[59px]',
-                            'h-[24px]',
+                            'w-[43px] md:w-[59px]',
+                            'h-[17px] md:h-[24px]',
                             'relative',
                             'mb-1.75'
                           )}
@@ -173,8 +178,8 @@ export default function ReadingDiary({ bookId, progress, totalPages }: Props) {
                         <span
                           className={cn(
                             'text-(--grey1) text-center',
-                            'w-[59px]',
-                            'font-medium text-xs leading-[1.16667] tracking-[-0.02em]'
+                            'w-[43px] md:w-[59px]',
+                            'font-medium text-[10px] md:text-xs max-md:leading-[1.2] md:leading-[1.16667] tracking-[-0.02em]'
                           )}
                         >
                           {session.speed} pages per hour
@@ -206,27 +211,6 @@ export default function ReadingDiary({ bookId, progress, totalPages }: Props) {
           ))}
         </div>
       </div>
-
-      <style jsx global>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 5px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        /* Scrollbar becomes visible only when hovering over the container */
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: transparent;
-          border-radius: 10px;
-          transition: background 0.3s ease;
-        }
-        .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-          background: #262626;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #333;
-        }
-      `}</style>
     </div>
   );
 }

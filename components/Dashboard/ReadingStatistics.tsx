@@ -38,6 +38,7 @@ export default function ReadingStatistics({ book, hasProgress }: Props) {
       <div className="max-h-[373px]">
         <p
           className={cn(
+            'hidden xxl:block',
             'text-(--grey1)',
             'w-full',
             'font-medium text-sm leading-[1.28571] tracking-[-0.04em]',
@@ -52,24 +53,29 @@ export default function ReadingStatistics({ book, hasProgress }: Props) {
         <div
           className={cn(
             'bg-(--grey3)',
-            'p-5',
+            'max-md:p-5 max-[1439px]:p-7 xxl:p-5',
             'rounded-xl',
-            'flex flex-col items-center gap-2.5'
+            'flex flex-col items-center max-md:gap-5.25 max-[1439px]:gap-4 xxl:gap-2.5'
           )}
         >
-          <div className={cn('relative w-[189px] h-[189px]')}>
+          <div
+            className={cn(
+              'relative w-[116px] h-[116px] md:w-[138px] md:h-[138px] xxl:w-[189px] xxl:h-[189px]'
+            )}
+          >
             <svg
-              width="189"
-              height="189"
               viewBox="0 0 200 200"
-              className={cn('transform -rotate-90')}
+              className={cn(
+                'transform -rotate-90',
+                'w-[116px] h-[116px] md:w-[138px] md:h-[138px] xxl:w-[189px] xxl:h-[189px]'
+              )}
             >
               <circle
                 cx="100"
                 cy="100"
                 r={radius}
                 fill="none"
-                stroke="#262626"
+                stroke="#1F1F1F"
                 strokeWidth="15"
               />
               <circle
@@ -95,7 +101,7 @@ export default function ReadingStatistics({ book, hasProgress }: Props) {
               <span
                 className={cn(
                   'text-foreground',
-                  'font-bold text-xl leading-none tracking-[-0.02em]'
+                  'font-bold text-lg md:text-xl max-md:leading-[1.11] md:leading-none tracking-[-0.02em]'
                 )}
               >
                 100%
@@ -103,7 +109,7 @@ export default function ReadingStatistics({ book, hasProgress }: Props) {
             </div>
           </div>
 
-          <div className={cn('flex flex-col items-center gap-2')}>
+          <div className={cn('flex flex-col items-center gap-1 md:gap-2')}>
             <div className={cn('flex items-center gap-4')}>
               <div
                 className={cn('w-[14px] h-[14px] bg-(--green) rounded-[4px]')}
@@ -111,7 +117,7 @@ export default function ReadingStatistics({ book, hasProgress }: Props) {
               <span
                 className={cn(
                   'text-white',
-                  'font-medium text-xl leading-none tracking-[-0.02em]'
+                  'font-medium text-sm md:text-xl max-md:leading-[1.28571] md:leading-none tracking-[-0.02em]'
                 )}
               >
                 {percentage.toFixed(2)}%
@@ -120,7 +126,7 @@ export default function ReadingStatistics({ book, hasProgress }: Props) {
             <span
               className={cn(
                 'text-(--grey1)',
-                'font-medium text-xs leading-[1.16667] tracking-[-0.02em]'
+                'font-medium text-[10px] md:text-xs max-md:leading-[1.2] md:leading-[1.16667] tracking-[-0.02em]'
               )}
             >
               {totalPagesRead} pages read

@@ -50,15 +50,20 @@ export default function LibraryBookCard({ book, onDetails, onRemove }: Props) {
         {/* Remove button */}
         <button
           className={cn(
-            'w-7 h-7',
-            'rounded-full border border-destructive/10 bg-destructive/20',
+            'w-7 h-7 rounded-full',
+            'border border-(--grey1) bg-(--dark-grey) hover:border-destructive/10 hover:bg-destructive/20',
             'flex items-center justify-center',
-            'hover:scale-105 transition-transform duration-250'
+            'hover:scale-105 transition-transform duration-250',
+            'text-(--grey1) hover:text-destructive transition-colors'
           )}
           onClick={() => onRemove(book._id)}
         >
           <svg width="16" height="16">
-            <use href={'/icons.svg#icon-trash'} fill="none" stroke="#e85050" />
+            <use
+              href={'/icons.svg#icon-trash'}
+              fill="none"
+              stroke="currentColor"
+            />
           </svg>
         </button>
       </div>

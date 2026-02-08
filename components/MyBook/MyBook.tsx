@@ -16,8 +16,7 @@ export default function MyBook({ book }: Props) {
   }, [book.progress]);
 
   const timeLeft = useMemo(() => {
-    if (!book.progress || book.progress.length === 0)
-      return 'Unknown time left';
+    if (!book.progress || book.progress.length === 0) return '';
 
     // 1. Calculate total time spent (ms) and total pages read
     let totalMs = 0;
@@ -66,18 +65,18 @@ export default function MyBook({ book }: Props) {
     <div
       className={cn(
         'bg-(--dark-grey) rounded-2xl',
-        'p-5 md:p-10',
+        'p-5 py-10 md:p-10',
         'flex flex-col items-center'
       )}
     >
       {/* Header section */}
-      <div className="flex justify-between items-baseline w-full mb-8 md:mb-10">
-        <h2 className="text-foreground text-[20px] font-bold leading-none tracking-[-0.02em]">
+      <div className="flex justify-between items-baseline w-full max-md:mb-10 max-[1439px]:mb-8 xxl:mb-11">
+        <h2 className="text-foreground font-bold text-xl md:text-[28px] leading-none md:leading-[1.14286] tracking-[-0.02em]">
           My reading
         </h2>
 
         {/* Dynamic time */}
-        <div className="text-(--grey1) text-[12px] font-medium leading-[1.16667] tracking-[-0.02em]">
+        <div className="text-(--grey1) text-xs md:text-sm font-medium max-md:leading-[1.33] md:leading-[1.28571] tracking-[-0.02em]">
           {timeLeft}
         </div>
       </div>
@@ -85,8 +84,8 @@ export default function MyBook({ book }: Props) {
       {/* Book cover */}
       <div
         className={cn(
-          'relative mb-5 md:mb-6',
-          'w-[137px] h-[208px] md:w-[224px] md:h-[340px]'
+          'relative mb-2.5 md:mb-6.25',
+          'max-md:w-[137px] max-md:h-[208px] max-[1439px]:w-[169px] max-[1439px]:h-[256px] xxl:w-[224px] xxl:h-[340px]'
         )}
       >
         {book.imageUrl ? (
@@ -95,7 +94,7 @@ export default function MyBook({ book }: Props) {
             alt={book.title}
             fill
             className="object-cover rounded-lg"
-            sizes="(max-width: 768px) 169px, 224px"
+            sizes="(min-width: 300px)"
           />
         ) : (
           <div
@@ -132,20 +131,27 @@ export default function MyBook({ book }: Props) {
       {/* Book info */}
       <h3
         className={cn(
-          'text-foreground text-base md:text-lg font-bold',
+          'text-foreground text-sm md:text-xl font-bold max-md:leading-[1.28571] md:leading-none',
+          'max-md:max-w-[146px] md:max-w-[317px]',
           'text-center mb-1 md:mb-2',
           'line-clamp-2'
         )}
       >
         {book.title}
       </h3>
-      <p className={cn('text-(--grey1) text-xs md:text-sm', 'text-center')}>
+      <p
+        className={cn(
+          'text-(--grey1)',
+          'font-medium md:font-bold text-[10px] md:text-xs leading-[1.2] md:leading-[1.28571]',
+          'text-center'
+        )}
+      >
         {book.author}
       </p>
 
       {/* Status indicator */}
-      <div className={cn('mt-10 md:mt-12')}>
-        <svg width="50" height="50">
+      <div className={cn('max-md:mt-5 max-[1439px]:mt-5 xxl:mt-6.25')}>
+        <svg className="w-10 h-10 md:w-12.5 md:h-12.5">
           <use
             href={`/icons.svg#icon-${isReading ? 'stop_record' : 'record'}`}
             fill="#141414"

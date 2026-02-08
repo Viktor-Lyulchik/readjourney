@@ -204,7 +204,6 @@ li {
 
 @media screen and (min-width: 768px) {
   .input {
-    /* width: 472px; */
     height: 50px;
 
     font-size: 14px;
@@ -213,8 +212,7 @@ li {
 }
 
 .input::placeholder {
-  opacity: 0; /* завжди не видно */
-  /* padding-left: 4px; текст починається трохи правіше */
+  opacity: 0;
 }
 
 .input:hover {
@@ -302,4 +300,23 @@ li {
     opacity: 0;
     transform: rotateY(-180deg);
   }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+/* Scrollbar becomes visible only when hovering over the container */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: var(--grey3);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: var(--grey4);
 }

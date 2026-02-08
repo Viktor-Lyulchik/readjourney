@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 export const CARD_CONTAINER = cn('bg-(--dark-grey)', 'rounded-2xl');
 
 // Padding variants for containers
-export const CARD_PADDING = cn('p-5 md:p-5 xxl:p-5');
+export const CARD_PADDING = cn('max-md:p-5 max-[1439px]:p-8 xxl:p-5');
 
 export const CARD_PADDING_LG = cn('px-5 md:px-10 xxl:px-10', 'py-10');
 
