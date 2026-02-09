@@ -12,7 +12,7 @@ export const poppins = Poppins({
   display: 'swap',
 });
 
-const SITE_URL = 'https://readjourney.vercel.app';
+const SITE_URL = 'https://readjourney-khaki.vercel.app';
 
 export const metadata: Metadata = {
   title: 'Read Journey - Track Your Reading Progress and Discover New Books',

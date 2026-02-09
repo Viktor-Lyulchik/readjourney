@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
 
-const SITE_URL = 'https://readjourney.vercel.app';
+const SITE_URL = 'https://readjourney-khaki.vercel.app';
 
 export const metadata: Metadata = {
   title: 'Read Journey - Track Your Reading Progress and Discover New Books',
