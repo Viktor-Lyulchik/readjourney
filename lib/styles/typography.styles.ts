@@ -11,7 +11,10 @@ import { cn } from '@/lib/utils';
 const BASE_TRACKING = 'tracking-[-0.02em]';
 
 // Headings
-export const HEADING_LG = cn('text-[28px] font-bold leading-8', BASE_TRACKING);
+export const HEADING_LG = cn(
+  'text-[18px] md:text-[28px] font-bold leading-8',
+  BASE_TRACKING
+);
 
 export const HEADING_MD = cn(
   'text-lg md:text-xl xxl:text-xl',

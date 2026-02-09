@@ -54,7 +54,9 @@ export default async function RecommendedBooks({ searchParams }: Props) {
           )}
         >
           <h1
-            className={cn('text-[28px] font-bold leading-8 tracking-[0.02em]')}
+            className={cn(
+              'text-[18px] md:text-[28px] font-bold leading-8 tracking-[0.02em]'
+            )}
           >
             Recommended
           </h1>
