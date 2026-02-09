@@ -18,8 +18,6 @@ export async function DELETE(request: NextRequest) {
     const bookId = searchParams.get('bookId');
     const readingId = searchParams.get('readingId');
 
-    console.log(`Deleting reading session ${readingId} for book ${bookId}, token=`, token);
-
     if (!bookId || !readingId) {
       return NextResponse.json(
         { error: 'bookId and readingId are required' },
@@ -38,8 +36,6 @@ export async function DELETE(request: NextRequest) {
       },
     });
 
-    console.log('Reading session deleted successfully:', apiRes.data);
-
     return NextResponse.json(apiRes.data, { status: apiRes.status });
   } catch (error) {
     if (isAxiosError(error)) {
@@ -47,8 +43,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json(
         {
           error:
-            error.response?.data?.message ||
-            'Deleting reading session failed',
+            error.response?.data?.message || 'Deleting reading session failed',
           response: error.response?.data,
         },
         { status: error.response?.status || 500 }

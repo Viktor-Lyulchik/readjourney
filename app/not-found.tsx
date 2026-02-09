@@ -1,30 +1,33 @@
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
 
-const SITE_URL = 'https://nanny-services-mocha.vercel.app';
+const SITE_URL = 'https://readjourney.vercel.app';
 
 export const metadata: Metadata = {
-  title: 'Nanny Services - Easy seeking babysitters Online',
-  description: 'Find a trusted nanny for your child.',
+  title: 'Read Journey - Track Your Reading Progress and Discover New Books',
+  description:
+    'An application for reading books and keeping statistics of what you read. Track your reading progress, set goals, and discover new books to read.',
   openGraph: {
     type: 'website',
-    title: 'Nanny Services - Easy seeking babysitters Online',
-    description: 'Find a trusted nanny for your child.',
+    title: 'Read Journey - Track Your Reading Progress and Discover New Books',
+    description:
+      'An application for reading books and keeping statistics of what you read. Track your reading progress, set goals, and discover new books to read.',
     url: `${SITE_URL}/`,
-    siteName: 'Nanny Services',
+    siteName: 'Read Journey',
     images: [
       {
-        url: `${SITE_URL}/img/hero.png`,
+        url: `${SITE_URL}/img/hero.webp`,
         width: 1200,
         height: 630,
-        alt: 'Nanny Services - Easy seeking babysitters Online',
+        alt: 'Read Journey - Track Your Reading Progress and Discover New Books',
       },
     ],
   },
   twitter: {
-    title: 'Nanny Services - Easy seeking babysitters Online',
-    description: 'Find a trusted nanny for your child.',
-    images: [`${SITE_URL}/img/hero.png`],
+    title: 'Read Journey - Track Your Reading Progress and Discover New Books',
+    description:
+      'An application for reading books and keeping statistics of what you read. Track your reading progress, set goals, and discover new books to read.',
+    images: [`${SITE_URL}/img/hero.webp`],
   },
 };
 

@@ -40,7 +40,7 @@ export const useAuthStore = create<AuthState>()(
 
           if (!response.ok) {
             throw new Error(
-              data.response?.message || data.error || 'Помилка входу'
+              data.response?.message || data.error || 'Error logging in'
             );
           }
 
@@ -51,7 +51,7 @@ export const useAuthStore = create<AuthState>()(
           });
         } catch (err: any) {
           set({
-            error: err?.message || 'Щось пішло не так',
+            error: err?.message || 'Something went wrong',
             isLoading: false,
           });
           throw err;
@@ -73,7 +73,7 @@ export const useAuthStore = create<AuthState>()(
 
           if (!response.ok) {
             throw new Error(
-              data.response?.message || data.error || 'Помилка реєстрації'
+              data.response?.message || data.error || 'Error registering user'
             );
           }
 
@@ -84,7 +84,7 @@ export const useAuthStore = create<AuthState>()(
           });
         } catch (err: any) {
           set({
-            error: err?.message || 'Щось пішло не так',
+            error: err?.message || 'Something went wrong',
             isLoading: false,
           });
           throw err;
@@ -101,7 +101,7 @@ export const useAuthStore = create<AuthState>()(
           set({ user: null, isLoading: false, error: null });
         } catch (err: any) {
           set({
-            error: err?.message || 'Помилка виходу',
+            error: err?.message || 'Error logging out',
             isLoading: false,
           });
         }

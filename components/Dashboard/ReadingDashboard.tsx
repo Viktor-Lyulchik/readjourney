@@ -21,6 +21,8 @@ type AddReadingFormValues = {
 type Props = {
   book: BookDetailsResponse;
   onBookCompleted: () => void;
+  viewMode: 'diary' | 'statistics' | 'emptyprogress';
+  setViewMode: (mode: 'diary' | 'statistics' | 'emptyprogress') => void;
 };
 
 const addReadingSchema: ObjectSchema<AddReadingFormValues> = yup.object({
@@ -36,10 +38,15 @@ const addReadingSchema: ObjectSchema<AddReadingFormValues> = yup.object({
     ),
 });
 
-export default function ReadingDashboard({ book, onBookCompleted }: Props) {
-  const [viewMode, setViewMode] = useState<
-    'diary' | 'statistics' | 'emptyprogress'
-  >('diary');
+export default function ReadingDashboard({
+  book,
+  onBookCompleted,
+  viewMode,
+  setViewMode,
+}: Props) {
+  // const [viewMode, setViewMode] = useState<
+  //   'diary' | 'statistics' | 'emptyprogress'
+  // >('diary');
 
   useEffect(() => {
     if (book.progress && book.progress.length === 0) {

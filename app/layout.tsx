@@ -12,10 +12,34 @@ export const poppins = Poppins({
   display: 'swap',
 });
 
+const SITE_URL = 'https://readjourney.vercel.app';
+
 export const metadata: Metadata = {
-  title: 'readjourney',
+  title: 'Read Journey - Track Your Reading Progress and Discover New Books',
   description:
     'An application for reading books and keeping statistics of what you read. Track your reading progress, set goals, and discover new books to read.',
+  openGraph: {
+    type: 'website',
+    title: 'Read Journey - Track Your Reading Progress and Discover New Books',
+    description:
+      'An application for reading books and keeping statistics of what you read. Track your reading progress, set goals, and discover new books to read.',
+    url: `${SITE_URL}/`,
+    siteName: 'Read Journey',
+    images: [
+      {
+        url: `${SITE_URL}/img/hero.webp`,
+        width: 1200,
+        height: 630,
+        alt: 'Read Journey - Track Your Reading Progress and Discover New Books',
+      },
+    ],
+  },
+  twitter: {
+    title: 'Read Journey - Track Your Reading Progress and Discover New Books',
+    description:
+      'An application for reading books and keeping statistics of what you read. Track your reading progress, set goals, and discover new books to read.',
+    images: [`${SITE_URL}/img/hero.webp`],
+  },
 };
 
 export default function RootLayout({

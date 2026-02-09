@@ -16,7 +16,8 @@ export default function LibraryBooksList({
   const GRID_STYLES = cn(
     'grid max-md:grid-cols-2 max-[1439px]:grid-cols-4 xxl:grid-cols-5',
     'gap-x-4 md:gap-x-6 xxl:gap-x-5',
-    'max-md:gap-y-2 max-[1439px]:gap-y-6.75 xxl:gap-y-6.75'
+    'max-md:gap-y-2 max-[1439px]:gap-y-6.75 xxl:gap-y-6.75',
+    'max-md:min-h-[150px] max-[1439px]:min-h-[300px] xxl:min-h-[530px]'
   );
 
   return (

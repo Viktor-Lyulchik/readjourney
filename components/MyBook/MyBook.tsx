@@ -7,9 +7,10 @@ import Image from 'next/image';
 
 type Props = {
   book: BookDetailsResponse;
+  isDiaryActive?: boolean;
 };
 
-export default function MyBook({ book }: Props) {
+export default function MyBook({ book, isDiaryActive }: Props) {
   // Find active reading session
   const isReading = useMemo(() => {
     return book.progress?.some(p => p.status === 'active') || false;
@@ -76,9 +77,11 @@ export default function MyBook({ book }: Props) {
         </h2>
 
         {/* Dynamic time */}
-        <div className="text-(--grey1) text-xs md:text-sm font-medium max-md:leading-[1.33] md:leading-[1.28571] tracking-[-0.02em]">
-          {timeLeft}
-        </div>
+        {!isDiaryActive && (
+          <div className="text-(--grey1) text-xs md:text-sm font-medium max-md:leading-[1.33] md:leading-[1.28571] tracking-[-0.02em]">
+            {timeLeft}
+          </div>
+        )}
       </div>
 
       {/* Book cover */}

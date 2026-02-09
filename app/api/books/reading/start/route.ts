@@ -6,12 +6,10 @@ import { api } from '../../../api';
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  
+
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
-
-    console.log('Starting reading session, token=', token);
 
     if (!token) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
@@ -23,8 +21,6 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    console.log('Reading session started successfully:', apiRes.data);
-
     return NextResponse.json(apiRes.data, { status: apiRes.status });
   } catch (error) {
     if (isAxiosError(error)) {
@@ -32,8 +28,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error:
-            error.response?.data?.message ||
-            'Starting reading session failed',
+            error.response?.data?.message || 'Starting reading session failed',
           response: error.response?.data,
         },
         { status: error.response?.status || 500 }

@@ -33,7 +33,7 @@ export default function LoadingSpinner({
     >
       <div
         className={cn(
-          'animate-spin rounded-full border-t-transparent border-(--blue)',
+          'animate-spin rounded-full border-t-transparent border-(--grey1)',
           SPINNER_SIZES[size],
           'mb-4'
         )}

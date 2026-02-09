@@ -20,6 +20,10 @@ export default function ReadingPage() {
 
   const { data: book, isLoading, error } = useBookDetails(bookId);
 
+  const [viewMode, setViewMode] = useState<
+    'diary' | 'statistics' | 'emptyprogress'
+  >('diary');
+
   const handleBookCompleted = useCallback(() => {
     setShowCompletedModal(true);
   }, []);
@@ -80,12 +84,19 @@ export default function ReadingPage() {
             <ReadingDashboard
               book={book}
               onBookCompleted={handleBookCompleted}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
             />
           </Dashboard>
 
           {/* Right content */}
           <div className={cn('flex-1')}>
-            <MyBook book={book} />
+            <MyBook
+              book={book}
+              isDiaryActive={
+                viewMode === 'diary' || viewMode === 'emptyprogress'
+              }
+            />
           </div>
         </div>
       </section>

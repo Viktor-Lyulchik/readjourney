@@ -10,8 +10,6 @@ export async function GET(req: NextRequest) {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
 
-    console.log('ROUTE token=', token);
-
     if (!token) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
@@ -20,8 +18,6 @@ export async function GET(req: NextRequest) {
     const limit = Number(req.nextUrl.searchParams.get('limit') ?? 10);
     const author = req.nextUrl.searchParams.get('author') ?? '';
     const title = req.nextUrl.searchParams.get('title') ?? '';
-
-    console.log('Route params:', { page, limit, author, title });
 
     const apiRes = await api.get('/books/recommend', {
       headers: {
@@ -37,10 +33,6 @@ export async function GET(req: NextRequest) {
         serialize: serializeParams,
       },
     });
-
-    console.log('Backend response status:', apiRes.status);
-    console.log('Backend URL:', apiRes.config.url);
-    console.log('API response:', apiRes.data);
 
     return NextResponse.json(apiRes.data, { status: apiRes.status });
   } catch (error) {

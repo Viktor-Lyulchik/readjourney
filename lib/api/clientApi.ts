@@ -60,8 +60,6 @@ export async function fetchRecommended(
 
     return data;
   } catch (error) {
-    console.log('error:', error);
-
     if (isAxiosError(error)) {
       throw new Error(
         error.response?.data?.message || 'Fetching recommended books failed'

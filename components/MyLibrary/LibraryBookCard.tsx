@@ -42,7 +42,7 @@ export default function LibraryBookCard({ book, onDetails, onRemove }: Props) {
       </div>
       <div className={cn('flex items-center justify-between')}>
         {/* Title + author */}
-        <div className={cn('max-w-37')}>
+        <div className={cn('max-w-32')}>
           <h3 className={cn(HEADING_SM, 'truncate mb-0.5')}>{book.title}</h3>
           <p className={cn(TEXT_HELPER_XSS, 'truncate')}>{book.author}</p>
         </div>

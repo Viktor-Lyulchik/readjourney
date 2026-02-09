@@ -14,8 +14,6 @@ export async function GET(request: NextRequest, { params }: Props) {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
 
-    console.log('ROUTE token=', token);
-
     if (!token) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
@@ -25,8 +23,6 @@ export async function GET(request: NextRequest, { params }: Props) {
         Authorization: `Bearer ${token}`,
       },
     });
-
-    // console.log(apiRes);
 
     return NextResponse.json(apiRes.data, { status: apiRes.status });
   } catch (error) {

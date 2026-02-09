@@ -10,8 +10,6 @@ export async function POST(request: NextRequest) {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
 
-    console.log('Adding book to library, token=', token);
-
     if (!token) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
@@ -21,8 +19,6 @@ export async function POST(request: NextRequest) {
         Authorization: `Bearer ${token}`,
       },
     });
-
-    console.log('Book added successfully:', apiRes.data);
 
     return NextResponse.json(apiRes.data, { status: apiRes.status });
   } catch (error) {
