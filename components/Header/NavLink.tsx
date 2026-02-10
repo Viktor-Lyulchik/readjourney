@@ -32,6 +32,7 @@ export default function NavLink({
   return (
     <Link
       href={href}
+      aria-label={`Go to ${label}`}
       onClick={onClick}
       className={cn(
         // Base styles depending on platform

@@ -89,7 +89,7 @@ export default function Header() {
       <div className={HEADER_CONTAINER}>
         {/* Logo */}
         <div>
-          <Link href="/">
+          <Link href="/" aria-label="Go to home page">
             <svg className="block xxl:hidden" width="42" height="17">
               <use
                 href="/icons.svg#icon-logo_mob"
@@ -98,7 +98,7 @@ export default function Header() {
               />
             </svg>
           </Link>
-          <Link href="/">
+          <Link href="/" aria-label="Go to home">
             <svg className="hidden xxl:block" width="182" height="17">
               <use
                 href="/icons.svg#icon-logo"
@@ -136,16 +136,24 @@ export default function Header() {
             className={cn(BUTTON_SECONDARY, 'py-2 px-4 hidden md:block')}
             onClick={handleLogout}
             disabled={isLoading}
+            aria-label="Log out"
           >
             {isLoading ? 'Logging out...' : 'Log out'}
           </button>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden"
+            className={cn(
+              'md:hidden',
+              'min-w-12 min-h-12',
+              'flex items-center justify-center',
+              'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-(--blue)',
+              'rounded-md transition-all'
+            )}
             onClick={() => setIsNavOpen(!isNavOpen)}
+            aria-label="Toggle navigation menu"
           >
-            <svg className="block" width="28" height="28">
+            <svg className="block" width="48" height="48">
               <use
                 href="/icons.svg#icon-burger"
                 fill="#141414"
@@ -159,6 +167,7 @@ export default function Header() {
             <div
               className="md:hidden fixed inset-0 z-40 flex"
               onClick={() => setIsNavOpen(false)}
+              aria-label="Close navigation menu"
             >
               <div className="absolute inset-0 bg-black/50" />
 
@@ -171,9 +180,9 @@ export default function Header() {
                 <button
                   onClick={() => setIsNavOpen(false)}
                   className={CLOSE_BUTTON}
-                  aria-label="Close menu"
+                  aria-label="Close navigation menu"
                 >
-                  <X className="w-4 h-4 text-foreground" />
+                  <X className="w-5 h-5 text-foreground" />
                 </button>
 
                 <div className="flex flex-col h-full gap-16 items-start mx-auto">
@@ -202,6 +211,7 @@ export default function Header() {
                     }}
                     disabled={isLoading}
                     className={cn(BUTTON_SECONDARY, 'mt-auto')}
+                    aria-label="Log out"
                   >
                     {isLoading ? 'Logging out...' : 'Log out'}
                   </button>
