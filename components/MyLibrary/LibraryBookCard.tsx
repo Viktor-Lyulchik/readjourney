@@ -51,10 +51,10 @@ export default function LibraryBookCard({ book, onDetails, onRemove }: Props) {
         <button
           className={cn(
             'w-7 h-7 rounded-full',
-            'border border-(--grey1) bg-(--dark-grey) hover:border-destructive/10 hover:bg-destructive/20',
+            'border max-[1439px]:border-destructive/10 xxl:border-(--grey1) max-[1439px]:bg-destructive/20 xxl:bg-(--dark-grey) hover:border-destructive/10 hover:bg-destructive/20',
             'flex items-center justify-center',
             'hover:scale-105 transition-transform duration-250',
-            'text-(--grey1) hover:text-destructive transition-colors'
+            'max-[1439px]:text-destructive xxl:text-(--grey1) hover:text-destructive transition-colors'
           )}
           onClick={() => onRemove(book._id)}
         >

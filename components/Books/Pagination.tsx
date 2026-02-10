@@ -28,7 +28,7 @@ export default function Pagination({ page, totalPages }: Props) {
     params.set('page', String(newPage));
 
     startTransition(() => {
-      router.push(`?${params.toString()}`);
+      router.push(`?${params.toString()}`, { scroll: false });
     });
   };
 
