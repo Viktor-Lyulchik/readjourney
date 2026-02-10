@@ -66,7 +66,7 @@ export default function AuthForm({ type }: Props) {
 
   const onSubmit = async (data: AuthFormValues) => {
     setLocalError('');
-    clearError(); // Очищаємо попередні помилки зі стору
+    clearError(); // Clear previous errors from the store
 
     try {
       if (type === 'register') {
@@ -97,7 +97,7 @@ export default function AuthForm({ type }: Props) {
           'w-full md:w-118'
         )}
       >
-        {/* Name показуємо тільки для реєстрації */}
+        {/* Name show only for registration */}
         {type === 'register' && (
           <div>
             <div className="relative">
@@ -106,6 +106,7 @@ export default function AuthForm({ type }: Props) {
                 placeholder="Name"
                 className={cn(
                   'input bg-(--grey3) text-foreground focus:outline-none',
+                  'min-h-12',
                   errors.name?.message ? 'border border-destructive' : ''
                 )}
                 {...register('name')}
@@ -127,7 +128,7 @@ export default function AuthForm({ type }: Props) {
           </div>
         )}
 
-        {/* Email / Password через generic компонент */}
+        {/* Email / Password by generic component */}
         <AuthFormInputFields<AuthFormValues>
           register={register}
           errors={errors}
@@ -166,7 +167,7 @@ export default function AuthForm({ type }: Props) {
         </Link>
       </div>
 
-      {/* Відображення помилок */}
+      {/* Display errors */}
       {(localError || error) && (
         <div className="mt-2">
           <p className="text-destructive text-[12px] md:text-[14px]">

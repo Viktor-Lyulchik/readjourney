@@ -31,7 +31,7 @@ export default function AuthLayout({
               )}
             >
               {/* Mobile logo */}
-              <Link href="/">
+              <Link href="/" aria-label="Go to home page">
                 <svg className="mb-6 block md:hidden" width="42" height="17">
                   <use
                     href="/icons.svg#icon-logo_mob"
@@ -42,7 +42,7 @@ export default function AuthLayout({
               </Link>
 
               {/* Tablet+ logo */}
-              <Link href="/">
+              <Link href="/" aria-label="Go to home page">
                 <svg
                   className="max-[1439px]:mb-32 xxl:mb-17 hidden md:block"
                   width="182"

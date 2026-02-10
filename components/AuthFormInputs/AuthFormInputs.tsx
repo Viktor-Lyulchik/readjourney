@@ -31,6 +31,7 @@ export default function AuthFormInputFields<T extends FieldValues>({
             placeholder="Email"
             className={cn(
               'input bg-(--grey3) text-foreground focus:outline-none',
+              'min-h-12',
               errors.email?.message ? 'border border-destructive' : ''
             )}
             {...register('email' as FieldPath<T>)}
@@ -59,6 +60,7 @@ export default function AuthFormInputFields<T extends FieldValues>({
             placeholder="Password"
             className={cn(
               'input input-password bg-(--grey3) text-foreground pl-40 pr-12 focus:outline-none',
+              'min-h-12',
               errors.password?.message ? 'border border-destructive' : ''
             )}
             {...register('password' as FieldPath<T>)}
@@ -73,7 +75,13 @@ export default function AuthFormInputFields<T extends FieldValues>({
           <button
             type="button"
             onClick={() => setShowPassword(prev => !prev)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 outline-none"
+            className={cn(
+              'absolute right-4 top-1/2 -translate-y-1/2 outline-none',
+              'min-w-12 min-h-12',
+              'flex items-center justify-center',
+              'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-(--blue)',
+              'rounded-md'
+            )}
             aria-label="Toggle password visibility"
           >
             {errors.password?.message ? (
