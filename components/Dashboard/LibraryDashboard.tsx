@@ -202,6 +202,7 @@ export default function LibraryDashboard() {
           <div className="flex flex-row justify-between items-center">
             <Link
               href="/recommended"
+              aria-label="Go to home"
               className={cn(
                 'underline inline-block',
                 'text-(--grey1) text-sm font-medium leading-[1.28571] tracking-[-0.02em]'
@@ -209,7 +210,7 @@ export default function LibraryDashboard() {
             >
               Home
             </Link>
-            <Link href="/recommended">
+            <Link href="/recommended" aria-label="Go to home">
               <svg width="24" height="24">
                 <use
                   href="/icons.svg#icon-log-in"

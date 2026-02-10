@@ -183,6 +183,7 @@ export default function RecommendedDashboard() {
           <div className="flex flex-row justify-between items-center">
             <Link
               href="/library"
+              aria-label="Go to my library"
               className={cn(
                 'underline inline-block',
                 'text-(--grey1) text-sm font-medium leading-[1.28571] tracking-[-0.02em]'
@@ -190,7 +191,7 @@ export default function RecommendedDashboard() {
             >
               My library
             </Link>
-            <Link href="/library">
+            <Link href="/library" aria-label="Go to my library">
               <svg width="24" height="24">
                 <use
                   href={'/icons.svg#icon-log-in'}
