@@ -153,7 +153,7 @@ export default function Header() {
             onClick={() => setIsNavOpen(!isNavOpen)}
             aria-label="Toggle navigation menu"
           >
-            <svg className="block" width="48" height="48">
+            <svg className="block" width="28" height="28">
               <use
                 href="/icons.svg#icon-burger"
                 fill="#141414"
