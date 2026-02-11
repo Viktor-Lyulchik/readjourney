@@ -11,9 +11,44 @@ type Props = {
 };
 
 export default function MyBook({ book, isDiaryActive }: Props) {
-  // Find active reading session
   const isReading = useMemo(() => {
     return book.progress?.some(p => p.status === 'active') || false;
+  }, [book.progress]);
+
+  const lastReadPage = useMemo(() => {
+    if (!book.progress || book.progress.length === 0) {
+      return null;
+    }
+
+    const activeSession = book.progress.find(p => p.status === 'active');
+
+    if (activeSession) {
+      // if there is an active session - return the page from which reading started
+      return activeSession.startPage;
+    }
+
+    // If there is no active session - look for the last completed one
+    // Sort sessions by finish date (from newest to oldest)
+    const completedSessions = book.progress
+      .filter(p => p.status === 'inactive' && p.finishPage !== undefined)
+      .sort((a, b) => {
+        // Compare by finish date (newest first)
+        if (!a.finishReading || !b.finishReading) return 0;
+        return (
+          new Date(b.finishReading).getTime() -
+          new Date(a.finishReading).getTime()
+        );
+      });
+
+    if (completedSessions.length > 0) {
+      // Return the last read page from the newest session
+      return completedSessions[0].finishPage!;
+    }
+
+    // If there are no completed sessions, but there are incomplete ones
+    // (e.g., the user started reading but didn't finish any session), return the start page of the last session
+    const lastSession = book.progress[book.progress.length - 1];
+    return lastSession.startPage;
   }, [book.progress]);
 
   const timeLeft = useMemo(() => {
@@ -161,6 +196,19 @@ export default function MyBook({ book, isDiaryActive }: Props) {
           />
         </svg>
       </div>
+
+      {lastReadPage !== null && (
+        <div
+          className={cn(
+            'mt-2 md:mt-3',
+            'text-(--grey1) text-[10px] md:text-xs',
+            'font-medium leading-[1.28571]',
+            'text-center'
+          )}
+        >
+          Last reading page {lastReadPage}
+        </div>
+      )}
     </div>
   );
 }

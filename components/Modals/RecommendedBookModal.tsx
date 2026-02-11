@@ -9,8 +9,6 @@ import { useRecommendedBooks } from '@/components/Books/RecommendedBooksContext'
  * Client component for displaying a modal window with book details
  * Used in RecommendedBooks for adding a book to the library
  *
- * IMPORTANT CHANGE:
- * - No longer uses useBookDetails for backend requests
  * - Book data is obtained from the RecommendedBooksContext context
  * - The backend endpoint works only with library book IDs, so we use local data
  *
@@ -41,14 +39,21 @@ export default function RecommendedBookModal() {
 
   // Adding a book to the library
   const handleAddToLibrary = () => {
-    if (!bookId) return;
+    if (!bookId || !book) return;
 
-    addBook(bookId, {
-      onSuccess: () => {
-        // After successful addition, close the modal
-        handleClose();
+    addBook(
+      {
+        bookId: bookId,
+        title: book.title,
+        author: book.author,
       },
-    });
+      {
+        onSuccess: () => {
+          // After successful addition, close the modal
+          handleClose();
+        },
+      }
+    );
   };
 
   // If there is no bookId in the URL - do not show the modal
